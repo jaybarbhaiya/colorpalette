@@ -1,0 +1,8 @@
+#setLabel {
+	font-style: bold;
+}
+
+#firstHeader,#secondHeader,#thirdHeader {
+    text-align: center;
+    font-weight: bold;
+}
