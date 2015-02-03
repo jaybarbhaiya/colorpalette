@@ -5,7 +5,7 @@ $(document).ready(function(){
   $('#sequentialParameter').hide();
 
   disableFirst();
-  
+
   $('#monotoneDelta').click(function(){
     calMonotoneDelta();
   });
@@ -142,7 +142,268 @@ $(document).ready(function(){
     var colorBlackBG = $('#colorBlackBG');
     var leftColumnBlackBG = $('#leftcolumnBlackBG');
     var rightColumnBlackBG = $('#rightcolumnBlackBG');
-    var colorSpace = $('#')
+    var colorSpace = $('#colorSpace').val();
+    var chromaDelta = Math.round($('#chromaDelta'));
+    var chromaDeltaByHue = Math.round($('#chromaDeltaByHue'));
+    var hueOfOriginalChroma = Math.round($('#hueOfOriginalChroma'));
+    var alternatingChroma = Math.round($('#alternatingChroma'));
+    var lumaDelta = Math.round($('#lumaDelta'));
+    var lumaDeltaByHue = Math.round($('#lumaDeltaByHue'));
+    var hueOfOriginalLuma = Math.round($('#hueOfOriginalLuma'));
+    var alternatingLuma = Math.round($('#alternatingLuma'));
+    var pieSlice = Math.round($('#pieSlice'));
+
+    if($('#firstColorSpace').is(':checked') && hue.text() !== "" && saturation.text() !== "" && luma.text() !== "") {
+      first_h = Math.round(hue);
+      first_s = Math.round(saturation);
+      first_l = Math.round(luma);
+    } else if ($('#firstColorSpace').is(':checked')) {
+      if (colorSpace === "HSL") {
+        first_h = 240;
+        first_s = 100;
+        first_l = 50;
+      } else if (colorSpace === "HCY") {
+        first_h = 240;
+        first_s = 100;
+        first_l = 11;
+      } else if (colorSpace === "LCh") {
+        first_h = 306;
+        first_s = 134;
+        first_l = 32;
+      } else if (colorSpace === "LCh99") {
+        first_h = 298;
+        first_s = 38;
+        first_l = 44;
+      }
+    } else if ($('#firstRGB').is(':checked')) {
+      if (colorSpace === "HSL") {
+        var rInit = redInput/255;
+        var gInit = greenInput/255;
+        var bInit = blueInput/255;
+        var M = Math.max(rInit,gInit,bInit);
+        var m = Math.min(rInit,gInit,bInit);
+        var C = M-m;
+        first_l = (M + m) * 0.5 * 100;
+        if(C===0) {
+            first_s = 0;
+        } else {
+            first_s = C/(1 - Math.abs(2 * first_l * 0.01 - 1)) * 100;
+        }
+        if(rInit === gInit && rInit === bInit) {
+            first_h = 0;
+        } else if(M === gInit) {
+            first_h = (((gInit - bInit)/C)%6) * 60;
+        } else if(M === gInit) {
+            first_h = (2+ ((bInit - rInit) / C)) * 60;
+        } else {
+            first_h = (4 + ((rInit - gInit)/C)) * 60;
+        }
+      } else if (colorSpace === "HCY") {
+        var rInit = redInput / 255;
+        var gInit = greenInput / 255;
+        var bInit = blueInput / 255;
+        var M = Math.max(rInit, gInit, bInit);
+        var C = M - Math.min(rInit, gInit, bInit);
+        first_l = (0.3 * rInit + 0.59 * gInit + 0.11 * bInit) * 100;
+        first_s = C * 100;
+        if (rInit === gInit && rInit === bInit) {
+            first_h = 0;
+        } else if (M === gInit) {
+            first_h = (((gInit - bInit) / C) % 6) * 60;
+        } else if (M === gInit) {
+            first_h = (2 + ((bInit - rInit) / C)) * 60;
+        } else {
+            first_h = (4 + ((rInit - gInit) / C)) * 60;
+        }
+      } else if (colorSpace === "LCh") {
+        var rInit = redInput * (100 / 255);
+        var gInit = greenInput * (100 / 255);
+        var bInit = blueInput * (100 / 255);
+        var X = 0.4124564 * rInit + 0.3575761 * gInit + 0.1804375 * bInit;
+        var Y = 0.2126729 * rInit + 0.7151522 * gInit + 0.072175 * bInit;
+        var Z = 0.0193339 * rInit + 0.119192 * gInit + 0.9503041 * bInit;
+        var Xn = X / 95.05;
+        var Yn = Y / 100;
+        var Zn = Z / 108.9;
+        if(Xn > (216/24389)) {
+            var x = Math.pow(Xn,(1/3));
+        } else {
+            var x = (24389/27/116) * Xn + (16/116);
+        }
+        if(Yn > (216/24389)) {
+            var y = Math.pow(Yn,(1/3));
+        } else {
+            var y = (24389/27/116) * Yn + (16/116);
+        }
+        if(Zn > (216/24389)) {
+            var z = Math.pow(Zn,(1/3));
+        } else {
+            var z = (24389/27/116) * Zn + (16/116);
+        }
+        first_l = 116 * y - 16;
+        var aa = 500*(x-y);
+        var bb = 200*(y-z);
+        first_s = Math.sqrt((aa*aa)+(bb*bb));
+        if(aa===0) {
+            first_h = 0;
+        }
+        else {
+            first_h = (Math.atan(bb/aa)*(180/Math.PI) + 180) % 360;
+        }
+      } else if (colorSpace === "LCh99") {
+        var rInit = redInput * (100 / 255);
+        var gInit = greenInput * (100 / 255);
+        var bInit = blueInput * (100 / 255);
+        var X = 0.4124564 * rInit + 0.3575761 * gInit + 0.1804375 * bInit;
+        var Y = 0.2126729 * rInit + 0.7151522 * gInit + 0.072175 * bInit;
+        var Z = 0.0193339 * rInit + 0.119192 * gInit + 0.9503041 * bInit;
+        var Xn = X / 95.05;
+        var Yn = Y / 100;
+        var Zn = Z / 108.9;
+        if(Xn > (216/24389)) {
+            var x = Math.pow(Xn,(1/3));
+        } else {
+            var x = (24389/27/116) * Xn + (16/116);
+        }
+        if(Yn > (216/24389)) {
+            var y = Math.pow(Yn,(1/3));
+        } else {
+            var y = (24389/27/116) * Yn + (16/116);
+        }
+        if(Zn > (216/24389)) {
+            var z = Math.pow(Zn,(1/3));
+        } else {
+            var z = (24389/27/116) * Zn + (16/116);
+        }
+        var aa = 500*(x-y);
+        var bb = 200*(y-z);
+        var e = Math.sin(16*0.0175);
+        var f = Math.cos(16*0.0175);
+        var cal_e = aa*f + bb*e;
+        var cal_f = 0.7*(-aa*e + bb*f);
+        var G = Math.sqrt(cal_e*cal_e + cal_f*cal_f);
+        var g = 0.045 * G;
+        if(g===0) {
+            var k=0;
+        } else {
+           var k = Math.log(1+g)/g;
+        }
+        var a99 = cal_e*k;
+        var b99 = cal_f*k;
+        first_l = 105.51* Math.log(1 + 0.0158 * (116 * y - 16));
+        first_s = Math.sqrt(a99*a99 + b99*b99);
+        if(a99===0) {
+            first_h = 0;
+        }
+        else {
+            first_h = (Math.atan(b99/a99)*(180/Math.PI) + 180) % 360;
+        }
+      }
+    }
+
+    var toHex = $('#toHex');
+    var index = $('#index');
+
+    var hsl_h = $('#hsl_h');
+    var hsl_s = $('#hsl_s');
+    var hsl_l = $('#hsl_l');
+
+    var rgb8Header = $('#rgb8Header');
+    var rgb8_r = $('#rgb8_r');
+    var rgb8_g = $('#rgb8_g');
+    var rgb8_b = $('#rgb8_b');
+
+    var rgbHeader = $('#rgbHeader');
+    var rgb_r = $('#rgb_r');
+    var rgb_g = $('#rgb_g');
+    var rgb_b = $('#rgb_b');
+
+    var hcyHeader = $('#hcyHeader');
+    var hcy_h = $('#hcy_h');
+    var hcy_c = $('#hcy_c');
+    var hcy_y = $('#hcy_y');
+
+    var labHeader = $('#labHeader');
+    var lab_l = $('#lab_l');
+    var lab_a = $('#lab_a');
+    var lab_b = $('#lab_b');
+
+    var lchABHeader = $('#lchABHeader');
+    var lchAB_l = $('#lchAB_l');
+    var lchAB_c = $('#lchAB_c');
+    var lchAB_h = $('#lchAB_h');
+
+    var lch99Header = $('#lch99Header');
+    var lch99_l = $('#lch99_l');
+    var lch99_c = $('#lch99_c');
+    var lch99_h = $('#lch99_h');
+
+    var luvHeader = $('#luvHeader');
+    var luv_l = $('#luv_l');
+    var luv_u = $('#luv_u');
+    var luv_v = $('#luv_v');
+
+    var lchUVHeader = $('#lchUVHeader');
+    var lchUV_l = $('#lchUV_l');
+    var lchUV_c = $('#lchUV_c');
+    var lchUV_h = $('#lchUV_h');
+
+    var lmsHeader = $('#lmsHeader');
+    var lms_l = $('#lms_l');
+    var lms_m = $('#lms_m');
+    var lms_s = $('#lms_s');
+
+    toHex.text("Hex");
+    index.text("Index");
+
+    hsl_h.text("H");
+    hsl_s.text("C/S");
+    hsl_l.text("L");
+
+    rgb8Header.text("RGB8");
+    rgb8_r.text("R8");
+    rgb8_g.text("G8");
+    rgb8_b.text("B8");
+
+    rgbHeader.text("RGB");
+    rgb_r.text("R");
+    rgb_g.text("G");
+    rgb_b.text("B");
+
+    hcyHeader.text("HCY");
+    hcy_h.text("H");
+    hcy_c.text("C");
+    hcy_y.text("Y");
+
+    labHeader.text("LAB");
+    lab_l.text("L");
+    lab_a.text("A");
+    lab_b.text("B");
+
+    lchABHeader.text("LCh(ab)");
+    lchAB_l.text("L");
+    lchAB_c.text("C");
+    lchAB_h.text("h");
+
+    lch99Header.text("LCh99");
+    lch99_l.text("L99");
+    lch99_c.text("C99");
+    lch99_h.text("h99");
+
+    luvHeader.text("LUV");
+    luv_l.text("L");
+    luv_u.text("U");
+    luv_v.text("V");
+
+    lchUVHeader.text("LCh(uv)");
+    lchUV_l.text("L");
+    lchUV_c.text("C");
+    lchUV_h.text("h");
+
+    lmsHeader.text("LMS");
+    lms_l.text("L");
+    lms_m.text("M");
+    lms_s.text("S");
   }
 
   function toHex(n) {
@@ -152,15 +413,15 @@ $(document).ready(function(){
   }
 
   function RGBtoXYZ(R, G, B) {
-    var var_R = R * (100/255);        
-    var var_G = G * (100/255);       
-    var var_B = B * (100/255);       
+    var var_R = R * (100/255);
+    var var_G = G * (100/255);
+    var var_B = B * (100/255);
 
     //Observer. = 2°, Illuminant = D65
     var X = var_R * 0.4124 + var_G * 0.3576 + var_B * 0.1805;
     var Y = var_R * 0.2126 + var_G * 0.7152 + var_B * 0.0722;
     var Z = var_R * 0.0193 + var_G * 0.1192 + var_B * 0.9505;
-    return [X, Y, Z];     
+    return [X, Y, Z];
   }
 
   function XYZtoLMS(X,Y,Z) {
@@ -217,7 +478,7 @@ $(document).ready(function(){
   function LUVtoLCHuv(l,u,v) {
     var grad = 57.296;
     var L = l;
-    var C = Math.sqrt(Math.pow(u,2) + Math.pow(v,2)); 
+    var C = Math.sqrt(Math.pow(u,2) + Math.pow(v,2));
     var H = 0;
     if(u===0) {
       H = 0;
@@ -234,7 +495,7 @@ $(document).ready(function(){
   function LABtoLCHab(l,a,b) {
     var grad = 57.296;
     var L = l;
-    var C = Math.sqrt(Math.pow(a,2) + Math.pow(b,2)); 
+    var C = Math.sqrt(Math.pow(a,2) + Math.pow(b,2));
     var H = 0;
     if(a===0) {
       H = 0;
@@ -384,6 +645,5 @@ $(document).ready(function(){
     var g8 = gg * 2.55;
     var b8 = bb * 2.55;
     return [Math.min(255, Math.max(0,Math.round(r8))), Math.min(255, Math.max(0, Math.round(g8))), Math.min(255, Math.max(0, Math.round(b8)))];
-  }       
+  }
 });
-

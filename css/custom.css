@@ -6,3 +6,41 @@
     text-align: center;
     font-weight: bold;
 }
+
+#toHex, #index, #hsl,
+#rgb_r,#rgb_g,#rgb_b,
+#rgb8_r,#rgb8_g,#rgb8_b,
+#hcy_h,#hcy_c,#hcy_y,
+#lab_l,#lab_a,#lab_b,
+#lchAB_l,#lchAB_c,#lchAB_h,
+#lch99_l,#lch99_c,#lch99_h,
+#luv_l,#luv_u,#luv_v,
+#lchUV_l,#lchUV_c,#lchUV_h,
+#lms_l,#lms_m,#lms_s {
+		text-align: center;
+		margin-top: 20px;
+}
+
+
+#hsl_h, #hsl_s, #hsl_l,
+#rgbSpace,#rgb8Space,#hcy,#lab,#lchAB,#lch99,#luv,#lchUV,
+#rgbHeader,#rgb8Header,#hcyHeader,#labHeader,#lchABHeader,#lch99Header,#luvHeader,#lchUVHeader,#lmsHeader  {
+		text-align: center;
+}
+
+#colorWhiteBG,#colorBlackBG {
+		width:110px;
+}
+
+#leftcolumnWhiteBG,#leftcolumnBlackBG {
+		width: 50px;
+		margin-left:10px;
+		margin-top:40px;
+		margin-bottom:40px;
+}
+
+#rightcolumnWhiteBG,#rightcolumnBlackBG {
+		width: 50px;
+		margin-top:40px;
+		margin-bottom:40px;
+}
