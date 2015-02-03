@@ -7,242 +7,247 @@
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/custom.css">
 </head>
-<body class="container-fluid">
-	<div>
-    <input type="radio" name="colorScheme"  id="qualitative" checked><label><b>Qualitative</b></label>
-    <input type="radio" name="colorScheme"  id="sequential"><label><b>Sequential</b></label>
-  </div>
-  <table class="form-inline">
-  	<tr class="form-inline">
-  		<td>
-  			<b>Color Space:</b> &nbsp;
-  			<select id="colorSpace" class="form-control">
-          <option value="HSL">HSL</option>
-          <option value="HCY">HCY</option>
-          <option value="LCh">LCh</option>
-          <option value="LCh99">LCh99</option>
-      	</select>
-  		</td>
-  		<td id="firstHeader">h</td>
-			<td id="secondHeader">C/S</td>
-  		<td id="thirdHeader">L/Y</td>
-  	</tr>
-  	<tr class="form-inline">
-  		<td>
-        <input type="radio" name="startColor" id="firstRGB"/><b>1st RGB</b>
-    	</td>
-    	<td>
-        <input type="text" id="r" size="1" class="form-control" />
-    	</td>
-    	<td>
-    		<input type="text" id="g" size="1" class="form-control"  />
-    	</td>
-    	<td>
-    		<input type="text" id="b" size="1" class="form-control"  />
-    	</td>
-  	</tr>
-  	<tr class="form-inline">
-      <td>
-        <input type="radio" name="startColor" id="firstColorSpace" checked/><label id="setLabel">1st HSL</label>
-      </td>
-      <td>
-        <input type="text" id="startHue" size="1" class="form-control"/>
-      </td>
-      <td>
-    		<input type="text" id="startChroma" size="1" class="form-control"/>
-      </td>
-      <td>
-      	<input type="text" id="startLuma" size="1" class="form-control"/>
-      </td>
-  	</tr>
-  	<tr><td><input type="checkbox" id="first" checked/></td></tr>
-  	<tr class="form-inline">
-      <td>
-        <b>Monotone Delta:</b> &nbsp;
-          <select id="monotoneDelta" class="form-control">
-            <option>1/36</option>
-            <option>1/18</option>
-            <option>1/9</option>
-            <option>1/8</option>
-            <option>1/4</option>
-            <option>3/8</option>
-            <option>1/2</option>
-            <option>1/12</option>
-            <option>1/6</option>
-            <option>1/3</option>
-            <option>GA</option>
-            <option>No</option>
-          </select>
-      </td>
-      <td>
-        <input type="text" size="1" id="hueDelta" value="10" class="form-control"/>
-      </td>
-      <td>
-      	<input type="text" id="chromaDelta" size="1" class="form-control"/>
-      </td>
-      <td>
-      	<input type="text" id="lumaDelta" size="1" class="form-control"/>
-      </td>
-    </tr>
-    <tr id="sequentialParameter" class="form-inline">
-      <td id="sequentialParameter">
-          <label id="sequentialParameter"><b>Start color:</b></label>
-      </td>
-      <td id="sequentialParameter">
-          <input id="sequentialParameter" type="text" id="seqStartHue" size="1" class="form-control" />
-      </td>
-      <td id="sequentialParameter">
-          <input id="sequentialParameter" type="text" id="seqStartChroma" size="1" class="form-control" />
-      </td>
-      <td id="sequentialParameter">
-          <input id="sequentialParameter" type="text" id="seqStartLuma" size="1" class="form-control" />
-      </td>
-  </tr>
-        <tr id="sequentialParameter">
-            <td id="sequentialParameter">
-                <label id="sequentialParameter"><b>End color:</b></label>
-            </td>
-            <td id="sequentialParameter">
-                <input id="sequentialParameter" type="text" id="seqEndHue" size="1" class="form-control"/>
-            </td>
-            <td id="sequentialParameter">
-                <input id="sequentialParameter" type="text" id="seqEndChroma" size="1" class="form-control"/>
-            </td>
-            <td id="sequentialParameter">
-                <input id="sequentialParameter" type="text" id="seqEndLuma" size="1" class="form-control"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <b>Delta by Hue</b>&nbsp;<input type="checkbox" name="hue" value="deltaByHue" checked/>&nbsp;Unique Hues &nbsp;&nbsp;&nbsp;&nbsp;
-            </td>
-            <td>
-                <input type="text" size="1" disabled class="form-control"/>   <br/>
-            </td>
-            <td>
-            	<input type="text" id="chromaDeltaByHue" size="1" class="form-control"/>
-            </td>
-            <td>
-            	<input type="text" id="lumaDeltaByHue" size="1" class="form-control"/>
-            </td>
-        </tr>
-        <tr>
-          <td>
-              <b>Hue of Original</b>&nbsp;<input type="checkbox" id="hueOfOriginal" name="hue" value="hueOfOriginal"/>&nbsp;Adjust LCh Hue &nbsp;&nbsp;&nbsp;&nbsp;
-          </td>
-          <td>
-              <input type="text" size="1" disabled class="form-control"/>
-          </td>
-          <td>
-          	<input type="text" id="hueOfOriginalChroma" size="1" value ="200" class="form-control"/>
-          </td>
-          <td>
-          	<input type="text" id="hueOfOriginalLuma" size="1" value="240" class="form-control"/>
-          </td>
-        </tr>
-        <tr>
-          <td>
-              <b>Alternating Delta</b>&nbsp;<input type="checkbox" id="alteringDelta" name="hue" value="alternatingDelta" />&nbsp;Use RYB hues &nbsp;&nbsp;&nbsp;&nbsp;
-          </td>
-          <td>
-              <input type="text" size="1" disabled class="form-control"/>
-          </td>
-          <td>
-          	<input type="text" id="alternatingChroma" size="1" class="form-control"/>
-          </td>
-          <td>
-            <input type="text" id="alternatingLuma" size="1" class="form-control"/>
-          </td>
-        </tr>
-        <tr>
-          <td>
-              <b>Pie: Number / Shrink(%)</b>
-          </td>
-          <td>
-            <input type="text" id="pieSlice" value="36" size="1" class="form-control"/>
-          </td>
-          <td>
-             <input type="text" id="sliceShrink" size="1" class="form-control"/>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <input type="submit" id="generatePalette" value="Generate Palette" class="btn btn-primary" />
-          </td>
-        </tr>
-    </table>
-
-  <div id="pieChart"></div>
-  <div id="palette" class="row">
-	  <div id="toHex"></div>
-	  <div id="index"></div>
-	  <div id="hsl">
-      <div id="hsl_h"></div>
-      <div id="hsl_s"></div>
-      <div id="hsl_l"></div>
+<body>
+	<div class="container-fluid">
+		<div>
+	    <input type="radio" name="colorScheme"  id="qualitative" checked><label><b>Qualitative</b></label>
+	    <input type="radio" name="colorScheme"  id="sequential"><label><b>Sequential</b></label>
 	  </div>
-	  <div id="colorWhiteBG">
-      <div id="leftcolumnWhiteBG"></div>
-      <div id="rightcolumnWhiteBG"></div>
-	  </div>
-	  <div id="colorBlackBG">
-      <div id="leftcolumnBlackBG"></div>
-      <div id="rightcolumnBlackBG"></div>
-	  </div>
-	  <div id="rgb8Space">
-	    <div id="rgb8Header"></div>
-	    <div id="rgb8_r"></div>
-	    <div id="rgb8_g"></div>
-	    <div id="rgb8_b"></div>
-	  </div>
-	  <div id="rgbSpace">
-	    <div id="rgbHeader"></div>
-	    <div id="rgb_r"></div>
-	    <div id="rgb_g"></div>
-	    <div id="rgb_b"></div>
-	  </div>
-	  <div id="hcy">
-	    <div id="hcyHeader"></div>
-	    <div id="hcy_h"></div>
-	    <div id="hcy_c"></div>
-	    <div id="hcy_y"></div>
-	  </div>
-	  <div id="lab">
-	    <div id="labHeader"></div>
-	    <div id="lab_l"></div>
-	    <div id="lab_a"></div>
-	    <div id="lab_b"></div>
-	  </div>
-	  <div id="lchAB">
-	    <div id="lchABHeader"></div>
-	    <div id="lchAB_l"></div>
-	    <div id="lchAB_c"></div>
-	    <div id="lchAB_h"></div>
-	  </div>
-	  <div id="lch99">
-	    <div id="lch99Header"></div>
-	    <div id="lch99_l"></div>
-	    <div id="lch99_c"></div>
-	    <div id="lch99_h"></div>
-	  </div>
-	  <div id="luv">
-	    <div id="luvHeader"></div>
-	    <div id="luv_l"></div>
-	    <div id="luv_u"></div>
-	    <div id="luv_v"></div>
-	  </div>
-	  <div id="lchUV">
-	    <div id="lchUVHeader"></div>
-	    <div id="lchUV_l"></div>
-	    <div id="lchUV_c"></div>
-	    <div id="lchUV_h"></div>
-	  </div>
-	  <div id="lms">
-	    <div id="lmsHeader"></div>
-	    <div id="lms_l"></div>
-	    <div id="lms_m"></div>
-	    <div id="lms_s"></div>
-	  </div>
+	  <table class="form-inline">
+	  	<tr class="form-inline">
+	  		<td>
+	  			<b>Color Space:</b> &nbsp;
+	  			<select id="colorSpace" class="form-control">
+	          <option value="HSL">HSL</option>
+	          <option value="HCY">HCY</option>
+	          <option value="LCh">LCh</option>
+	          <option value="LCh99">LCh99</option>
+	      	</select>
+	  		</td>
+	  		<td id="firstHeader">h</td>
+				<td id="secondHeader">C/S</td>
+	  		<td id="thirdHeader">L/Y</td>
+	  	</tr>
+	  	<tr class="form-inline">
+	  		<td>
+	        <input type="radio" name="startColor" id="firstRGB"/><b>1st RGB</b>
+	    	</td>
+	    	<td>
+	        <input type="text" id="r" size="1" class="form-control" />
+	    	</td>
+	    	<td>
+	    		<input type="text" id="g" size="1" class="form-control"  />
+	    	</td>
+	    	<td>
+	    		<input type="text" id="b" size="1" class="form-control"  />
+	    	</td>
+	  	</tr>
+	  	<tr class="form-inline">
+	      <td>
+	        <input type="radio" name="startColor" id="firstColorSpace" checked/><label id="setLabel">1st HSL</label>
+	      </td>
+	      <td>
+	        <input type="text" id="startHue" size="1" class="form-control"/>
+	      </td>
+	      <td>
+	    		<input type="text" id="startChroma" size="1" class="form-control"/>
+	      </td>
+	      <td>
+	      	<input type="text" id="startLuma" size="1" class="form-control"/>
+	      </td>
+	  	</tr>
+	  	<tr><td><input type="checkbox" id="first" checked/></td></tr>
+	  	<tr class="form-inline">
+	      <td>
+	        <b>Monotone Delta:</b> &nbsp;
+	          <select id="monotoneDelta" class="form-control">
+	            <option>1/36</option>
+	            <option>1/18</option>
+	            <option>1/9</option>
+	            <option>1/8</option>
+	            <option>1/4</option>
+	            <option>3/8</option>
+	            <option>1/2</option>
+	            <option>1/12</option>
+	            <option>1/6</option>
+	            <option>1/3</option>
+	            <option>GA</option>
+	            <option>No</option>
+	          </select>
+	      </td>
+	      <td>
+	        <input type="text" size="1" id="hueDelta" value="10" class="form-control"/>
+	      </td>
+	      <td>
+	      	<input type="text" id="chromaDelta" size="1" class="form-control"/>
+	      </td>
+	      <td>
+	      	<input type="text" id="lumaDelta" size="1" class="form-control"/>
+	      </td>
+	    </tr>
+	    <tr id="sequentialParameter" class="form-inline">
+	      <td id="sequentialParameter">
+	          <label id="sequentialParameter"><b>Start color:</b></label>
+	      </td>
+	      <td id="sequentialParameter">
+	          <input id="sequentialParameter" type="text" id="seqStartHue" size="1" class="form-control" />
+	      </td>
+	      <td id="sequentialParameter">
+	          <input id="sequentialParameter" type="text" id="seqStartChroma" size="1" class="form-control" />
+	      </td>
+	      <td id="sequentialParameter">
+	          <input id="sequentialParameter" type="text" id="seqStartLuma" size="1" class="form-control" />
+	      </td>
+	  </tr>
+	        <tr id="sequentialParameter">
+	            <td id="sequentialParameter">
+	                <label id="sequentialParameter"><b>End color:</b></label>
+	            </td>
+	            <td id="sequentialParameter">
+	                <input id="sequentialParameter" type="text" id="seqEndHue" size="1" class="form-control"/>
+	            </td>
+	            <td id="sequentialParameter">
+	                <input id="sequentialParameter" type="text" id="seqEndChroma" size="1" class="form-control"/>
+	            </td>
+	            <td id="sequentialParameter">
+	                <input id="sequentialParameter" type="text" id="seqEndLuma" size="1" class="form-control"/>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td>
+	                <b>Delta by Hue</b>&nbsp;<input type="checkbox" name="hue" value="deltaByHue" checked/>&nbsp;Unique Hues &nbsp;&nbsp;&nbsp;&nbsp;
+	            </td>
+	            <td>
+	                <input type="text" size="1" disabled class="form-control"/>   <br/>
+	            </td>
+	            <td>
+	            	<input type="text" id="chromaDeltaByHue" size="1" class="form-control"/>
+	            </td>
+	            <td>
+	            	<input type="text" id="lumaDeltaByHue" size="1" class="form-control"/>
+	            </td>
+	        </tr>
+	        <tr>
+	          <td>
+	              <b>Hue of Original</b>&nbsp;<input type="checkbox" id="hueOfOriginal" name="hue" value="hueOfOriginal"/>&nbsp;Adjust LCh Hue &nbsp;&nbsp;&nbsp;&nbsp;
+	          </td>
+	          <td>
+	              <input type="text" size="1" disabled class="form-control"/>
+	          </td>
+	          <td>
+	          	<input type="text" id="hueOfOriginalChroma" size="1" value ="200" class="form-control"/>
+	          </td>
+	          <td>
+	          	<input type="text" id="hueOfOriginalLuma" size="1" value="240" class="form-control"/>
+	          </td>
+	        </tr>
+	        <tr>
+	          <td>
+	              <b>Alternating Delta</b>&nbsp;<input type="checkbox" id="alteringDelta" name="hue" value="alternatingDelta" />&nbsp;Use RYB hues &nbsp;&nbsp;&nbsp;&nbsp;
+	          </td>
+	          <td>
+	              <input type="text" size="1" disabled class="form-control"/>
+	          </td>
+	          <td>
+	          	<input type="text" id="alternatingChroma" size="1" class="form-control"/>
+	          </td>
+	          <td>
+	            <input type="text" id="alternatingLuma" size="1" class="form-control"/>
+	          </td>
+	        </tr>
+	        <tr>
+	          <td>
+	              <b>Pie: Number / Shrink(%)</b>
+	          </td>
+	          <td>
+	            <input type="text" id="pieSlice" value="36" size="1" class="form-control"/>
+	          </td>
+	          <td>
+	             <input type="text" id="sliceShrink" size="1" class="form-control"/>
+	          </td>
+	        </tr>
+	        <tr>
+	          <td>
+	            <input type="submit" id="generatePalette" value="Generate Palette" class="btn btn-primary" />
+	          </td>
+	        </tr>
+	    </table>
+      <div id="pieChart"></div>
+		</div>
+		<div class="container-fluid">
+  	  <div id="palette" class="row">
+  		  <div class="col-xs-12">
+          <div id="toHex" class="col-xs-1"></div>
+    		  <div id="index" class="col-xs-1"></div>
+    		  <div id="hsl" class="col-xs-3">
+    	      <div id="hsl_h" class="col-xs-1"></div>
+    	      <div id="hsl_s" class="col-xs-1"></div>
+    	      <div id="hsl_l" class="col-xs-1"></div>
+    	  </div>
+    	  <div id="colorWhiteBG" class="col-xs-2">
+          <div id="leftcolumnWhiteBG" class="col-xs-1"></div>
+          <div id="rightcolumnWhiteBG" class="col-xs-1"></div>
+    	  </div>
+    	  <div id="colorBlackBG" class="col-xs-2">
+          <div id="leftcolumnBlackBG" class="col-xs-1"></div>
+          <div id="rightcolumnBlackBG" class="col-xs-1"></div>
+    	  </div>
+    	  <div id="rgb8Space" class="col-xs-4">
+    	    <div id="rgb8Header" class="col-xs-3"></div>
+    	    <div id="rgb8_r" class="col-xs-1"></div>
+    	    <div id="rgb8_g" class="col-xs-1"></div>
+    	    <div id="rgb8_b" class="col-xs-1"></div>
+    	  </div>
+    	  <div id="rgbSpace">
+    	    <div id="rgbHeader"></div>
+    	    <div id="rgb_r"></div>
+    	    <div id="rgb_g"></div>
+    	    <div id="rgb_b"></div>
+    	  </div>
+    	  <div id="hcy">
+    	    <div id="hcyHeader"></div>
+    	    <div id="hcy_h"></div>
+    	    <div id="hcy_c"></div>
+    	    <div id="hcy_y"></div>
+    	  </div>
+    	  <div id="lab">
+    	    <div id="labHeader"></div>
+    	    <div id="lab_l"></div>
+    	    <div id="lab_a"></div>
+    	    <div id="lab_b"></div>
+    	  </div>
+    	  <div id="lchAB">
+    	    <div id="lchABHeader"></div>
+    	    <div id="lchAB_l"></div>
+    	    <div id="lchAB_c"></div>
+    	    <div id="lchAB_h"></div>
+    	  </div>
+    	  <div id="lch99">
+    	    <div id="lch99Header"></div>
+    	    <div id="lch99_l"></div>
+    	    <div id="lch99_c"></div>
+    	    <div id="lch99_h"></div>
+    	  </div>
+    	  <div id="luv">
+    	    <div id="luvHeader"></div>
+    	    <div id="luv_l"></div>
+    	    <div id="luv_u"></div>
+    	    <div id="luv_v"></div>
+    	  </div>
+    	  <div id="lchUV">
+    	    <div id="lchUVHeader"></div>
+    	    <div id="lchUV_l"></div>
+    	    <div id="lchUV_c"></div>
+    	    <div id="lchUV_h"></div>
+    	  </div>
+    	  <div id="lms">
+    	    <div id="lmsHeader"></div>
+    	    <div id="lms_l"></div>
+    	    <div id="lms_m"></div>
+    	    <div id="lms_s"></div>
+    	  </div>
+      </div>
+    </div>
   </div>
 	<script src="js/colorPalette.js"></script>
 </body>
