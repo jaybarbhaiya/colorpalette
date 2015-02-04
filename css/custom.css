@@ -29,18 +29,18 @@
 }
 
 #colorWhiteBG,#colorBlackBG {
-		width:110px;
+		/*width:110px;*/
 }
 
 #leftcolumnWhiteBG,#leftcolumnBlackBG {
-		width: 50px;
+		/*width: 50px;*/
 		margin-left:10px;
 		margin-top:40px;
 		margin-bottom:40px;
 }
 
 #rightcolumnWhiteBG,#rightcolumnBlackBG {
-		width: 50px;
+		/*width: 50px;*/
 		margin-top:40px;
 		margin-bottom:40px;
 }

@@ -407,6 +407,49 @@ $(document).ready(function(){
 
     colorWhiteBG.css("background-color","#fff");
     colorBlackBG.css("background-color","#000");
+
+    if($('#qualitative').is(':checked')) {
+      for (i = 0; i < 36; i++) {
+        if (i === 0) {
+          delta[i] = Math.round(hue.val()) - hueDelta;
+          if($('#hueOfOriginal').is(':checked')) {
+            if(colorSpace.val() === "LCh" || colorSpace.val() === "LCh99") {
+              deltaH[i] = first_h - 30;
+            }
+          } else {
+            deltaH[i] = first_h;
+          }
+        } else {
+          delta[i] = (delta[i - 1] + hueDelta) % 360;
+          deltaH[i] = (deltaH[i - 1] + hueDelta) % 360;
+        }
+        if($('#alteringDelta').is(':checked') && deltaH[i] < 240) {
+          if (deltaH[i] <= 120) {
+              H = 0.5 * deltaH[i];
+          } else if (deltaH[i] <= 180) {
+              H = 60 + (deltaH[i] - 120);
+          } else {
+              H = 120 + 2 * (deltaH[i] - 180);
+          }
+        } else {
+           H = deltaH[i];
+        }
+        S = Math.min(100, Math.max(0, first_s - chromaDelta * i + chromaDeltaByHue * (1 - Math.cos((deltaH[i] - hueOfOriginalChroma) * 0.0175)) * 0.5 + alternatingChroma * (0.0175 % 2)));
+        L = Math.min(100, Math.max(0, first_l - lumaDelta * i + lumaDeltaByHue * (1 - Math.cos((deltaH[i] - hueOfOriginalLuma) * 0.0175)) * 0.5 + alternatingLuma * (0.0175 % 2)));
+      }
+    }
+  }
+
+  function childDiv(child,str,num,parent,val) {
+    child = $('div');
+    child.attr('id', str + num);
+    parent.append(child);
+    $('#' + (str + num)).text(val);
+    $('#' + (str + num)).addClass('col-xs-1');
+  }
+
+  function rgbToHex(R, G, B) {
+    return toHex(R) + toHex(G) + toHex(B);
   }
 
   function toHex(n) {
