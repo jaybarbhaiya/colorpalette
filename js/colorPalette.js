@@ -353,57 +353,60 @@ $(document).ready(function(){
     var lms_m = $('#lms_m');
     var lms_s = $('#lms_s');
 
-    toHex.text("Hex");
-    index.text("Index");
+    toHex.text("Hex").css("font-weight","Bold");
+    index.text("Index").css("font-weight","Bold");
 
-    hsl_h.text("H");
-    hsl_s.text("C/S");
-    hsl_l.text("L");
+    hsl_h.text("H").css("font-weight","Bold");
+    hsl_s.text("C/S").css("font-weight","Bold");
+    hsl_l.text("L").css("font-weight","Bold");
 
-    rgb8Header.text("RGB8");
-    rgb8_r.text("R8");
-    rgb8_g.text("G8");
-    rgb8_b.text("B8");
+    rgb8Header.text("RGB8").css("font-weight","Bold");
+    rgb8_r.text("R8").css("font-weight","Bold");
+    rgb8_g.text("G8").css("font-weight","Bold");
+    rgb8_b.text("B8").css("font-weight","Bold");
 
-    rgbHeader.text("RGB");
-    rgb_r.text("R");
-    rgb_g.text("G");
-    rgb_b.text("B");
+    rgbHeader.text("RGB").css("font-weight","Bold");
+    rgb_r.text("R").css("font-weight","Bold");
+    rgb_g.text("G").css("font-weight","Bold");
+    rgb_b.text("B").css("font-weight","Bold");
 
-    hcyHeader.text("HCY");
-    hcy_h.text("H");
-    hcy_c.text("C");
-    hcy_y.text("Y");
+    hcyHeader.text("HCY").css("font-weight","Bold");
+    hcy_h.text("H").css("font-weight","Bold");
+    hcy_c.text("C").css("font-weight","Bold");
+    hcy_y.text("Y").css("font-weight","Bold");
 
-    labHeader.text("LAB");
-    lab_l.text("L");
-    lab_a.text("A");
-    lab_b.text("B");
+    labHeader.text("LAB").css("font-weight","Bold");
+    lab_l.text("L").css("font-weight","Bold");
+    lab_a.text("A").css("font-weight","Bold");
+    lab_b.text("B").css("font-weight","Bold");
 
-    lchABHeader.text("LCh(ab)");
-    lchAB_l.text("L");
-    lchAB_c.text("C");
-    lchAB_h.text("h");
+    lchABHeader.text("LCh(ab)").css("font-weight","Bold");
+    lchAB_l.text("L").css("font-weight","Bold");
+    lchAB_c.text("C").css("font-weight","Bold");
+    lchAB_h.text("h").css("font-weight","Bold");
 
-    lch99Header.text("LCh99");
-    lch99_l.text("L99");
-    lch99_c.text("C99");
-    lch99_h.text("h99");
+    lch99Header.text("LCh99").css("font-weight","Bold");
+    lch99_l.text("L99").css("font-weight","Bold");
+    lch99_c.text("C99").css("font-weight","Bold");
+    lch99_h.text("h99").css("font-weight","Bold");
 
-    luvHeader.text("LUV");
-    luv_l.text("L");
-    luv_u.text("U");
-    luv_v.text("V");
+    luvHeader.text("LUV").css("font-weight","Bold");
+    luv_l.text("L").css("font-weight","Bold");
+    luv_u.text("U").css("font-weight","Bold");
+    luv_v.text("V").css("font-weight","Bold");
 
-    lchUVHeader.text("LCh(uv)");
-    lchUV_l.text("L");
-    lchUV_c.text("C");
-    lchUV_h.text("h");
+    lchUVHeader.text("LCh(uv)").css("font-weight","Bold");
+    lchUV_l.text("L").css("font-weight","Bold");
+    lchUV_c.text("C").css("font-weight","Bold");
+    lchUV_h.text("h").css("font-weight","Bold");
 
-    lmsHeader.text("LMS");
-    lms_l.text("L");
-    lms_m.text("M");
-    lms_s.text("S");
+    lmsHeader.text("LMS").css("font-weight","Bold");
+    lms_l.text("L").css("font-weight","Bold");
+    lms_m.text("M").css("font-weight","Bold");
+    lms_s.text("S").css("font-weight","Bold");
+
+    colorWhiteBG.css("background-color","#fff");
+    colorBlackBG.css("background-color","#000");
   }
 
   function toHex(n) {
