@@ -17,30 +17,35 @@
 #luv_l,#luv_u,#luv_v,
 #lchUV_l,#lchUV_c,#lchUV_h,
 #lms_l,#lms_m,#lms_s {
-		text-align: center;
-		margin-top: 20px;
+	float:left;
+	text-align: center;
+	margin-top: 20px;
 }
 
 
 #hsl_h, #hsl_s, #hsl_l,
 #rgbSpace,#rgb8Space,#hcy,#lab,#lchAB,#lch99,#luv,#lchUV,
 #rgbHeader,#rgb8Header,#hcyHeader,#labHeader,#lchABHeader,#lch99Header,#luvHeader,#lchUVHeader,#lmsHeader  {
-		text-align: center;
+	float:left;
+	text-align: center;
 }
 
 #colorWhiteBG,#colorBlackBG {
-		/*width:110px;*/
+	float:left;
+	width:110px;
 }
 
 #leftcolumnWhiteBG,#leftcolumnBlackBG {
-		/*width: 50px;*/
-		margin-left:10px;
-		margin-top:40px;
-		margin-bottom:40px;
+	float:left;
+	width: 50px;
+	margin-left:10px;
+	margin-top:40px;
+	margin-bottom:40px;
 }
 
 #rightcolumnWhiteBG,#rightcolumnBlackBG {
-		/*width: 50px;*/
-		margin-top:40px;
-		margin-bottom:40px;
+	float:left;
+	width: 50px;
+	margin-top:40px;
+	margin-bottom:40px;
 }

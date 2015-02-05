@@ -143,15 +143,15 @@ $(document).ready(function(){
     var leftColumnBlackBG = $('#leftcolumnBlackBG');
     var rightColumnBlackBG = $('#rightcolumnBlackBG');
     var colorSpace = $('#colorSpace').val();
-    var chromaDelta = Math.round($('#chromaDelta'));
-    var chromaDeltaByHue = Math.round($('#chromaDeltaByHue'));
-    var hueOfOriginalChroma = Math.round($('#hueOfOriginalChroma'));
-    var alternatingChroma = Math.round($('#alternatingChroma'));
-    var lumaDelta = Math.round($('#lumaDelta'));
-    var lumaDeltaByHue = Math.round($('#lumaDeltaByHue'));
-    var hueOfOriginalLuma = Math.round($('#hueOfOriginalLuma'));
-    var alternatingLuma = Math.round($('#alternatingLuma'));
-    var pieSlice = Math.round($('#pieSlice'));
+    var chromaDelta = Math.round($('#chromaDelta').val());
+    var chromaDeltaByHue = Math.round($('#chromaDeltaByHue').val());
+    var hueOfOriginalChroma = Math.round($('#hueOfOriginalChroma').val());
+    var alternatingChroma = Math.round($('#alternatingChroma').val());
+    var lumaDelta = Math.round($('#lumaDelta').val());
+    var lumaDeltaByHue = Math.round($('#lumaDeltaByHue').val());
+    var hueOfOriginalLuma = Math.round($('#hueOfOriginalLuma').val());
+    var alternatingLuma = Math.round($('#alternatingLuma').val());
+    var pieSlice = Math.round($('#pieSlice').val());
 
     if($('#firstColorSpace').is(':checked') && hue.text() !== "" && saturation.text() !== "" && luma.text() !== "") {
       first_h = Math.round(hue);
@@ -436,16 +436,87 @@ $(document).ready(function(){
         }
         S = Math.min(100, Math.max(0, first_s - chromaDelta * i + chromaDeltaByHue * (1 - Math.cos((deltaH[i] - hueOfOriginalChroma) * 0.0175)) * 0.5 + alternatingChroma * (0.0175 % 2)));
         L = Math.min(100, Math.max(0, first_l - lumaDelta * i + lumaDeltaByHue * (1 - Math.cos((deltaH[i] - hueOfOriginalLuma) * 0.0175)) * 0.5 + alternatingLuma * (0.0175 % 2)));
+
+        //Calculating RGB8 from HSL
+        if(colorSpace === "HSL") {
+          RGB8 = RGB8forHSL(H, S, L);
+          var R8 = RGB8[0];
+          var G8 = RGB8[1];
+          var B8 = RGB8[2];
+        } else if(colorSpace === "HCY") {
+          RGB8 = RGB8forHCY(H, S, L);
+          var R8 = RGB8[0];
+          var G8 = RGB8[1];
+          var B8 = RGB8[2];
+        } else if (colorSpace === "LCh") {
+          RGB8 = RGB8forLCh(H, S, L);
+          var R8 = RGB8[0];
+          var G8 = RGB8[1];
+          var B8 = RGB8[2];
+        } else if(colorSpace === "LCh99") {
+          RGB8 = RGB8forLCh99(H, S, L);
+          var R8 = RGB8[0];
+          var G8 = RGB8[1];
+          var B8 = RGB8[2];
+        }
+
+        //display the HEX values
+        var hexColor;
+        childDivString(hexColor,"hexColor",i,toHex,"#" + rgbToHex(R8,G8,B8));
+
+        //display the INDEX values
+        var indexChild;
+        childDivString(indexChild,"indexChild",i,index,i);
+
+        //Display HSL values
+        var hsl_hChild;
+        childDiv(hsl_hChild,"hsl_hChild",i,hsl_h,Math.round(H));
+        var hsl_sChild;
+        childDiv(hsl_sChild,"hsl_sChild",i,hsl_s,Math.round(S));
+        var hsl_lChild;
+        childDiv(hsl_lChild,"hsl_lChild",i,hsl_l,Math.round(L));
+        //.end Display HSL values
+
+        //Display colors with WHITE background
+        var divLeftWhiteBG;
+        childDivColor(divLeftWhiteBG,"divLeftWhiteBG",i,leftColumnWhiteBG,"#" + rgbToHex(R8, G8, B8));
+        var gray = Math.round((0.299 * R8) + (0.587 * G8) + (0.114 * B8)); // Calculate grayscale equivalent
+        // Displaying GRAYSCALE equivalent on WHITE background        
+        var divLeftWhiteBG = $('#divLeftWhiteBG' + i);
+        var divRightWhiteBG;
+        childDivColor(divRightWhiteBG,"divRightWhiteBG",i,rightColumnWhiteBG,"#" + rgbToHex(gray, gray, gray));
+        //.end Display colors with WHITE background
       }
     }
   }
 
-  function childDiv(child,str,num,parent,val) {
-    child = $('div');
-    child.attr('id', str + num);
+  function childDivString(child,str,num,parent,val) {
+    var child = $(document.createElement("div"));
+    child.attr('id',str+num);
     parent.append(child);
-    $('#' + (str + num)).text(val);
-    $('#' + (str + num)).addClass('col-xs-1');
+    $('#'+str+num).css('height','20px');
+    $('#'+str+num).css('width','70px');
+    $('#'+str+num).css('font-weight','normal');
+    $('#'+str+num).text(val);
+  }
+
+  function childDiv(child,str,num,parent,val) {
+    var child = $(document.createElement("div"));
+    child.attr('id',str+num);
+    parent.append(child);
+    $('#'+str+num).css('height','20px');
+    $('#'+str+num).css('width','40px');
+    $('#'+str+num).css('font-weight','normal');
+    $('#'+str+num).text(val);
+  }
+
+  function childDivColor(child,str,num,parent,val) {
+    var child = $(document.createElement("div"));
+    child.attr('id',str+num);
+    parent.append(child);
+    $('#'+str+num).css('height','20px');
+    $('#'+str+num).css('width','40px');
+    $('#'+str+num).css('background-color',val);
   }
 
   function rgbToHex(R, G, B) {
