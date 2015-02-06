@@ -1,5 +1,13 @@
+table {
+    float:left; 
+}
+
 #setLabel {
 	font-style: bold;
+}
+
+svg {
+    padding: 25px;
 }
 
 #firstHeader,#secondHeader,#thirdHeader {
@@ -28,6 +36,7 @@
 #rgbHeader,#rgb8Header,#hcyHeader,#labHeader,#lchABHeader,#lch99Header,#luvHeader,#lchUVHeader,#lmsHeader  {
 	float:left;
 	text-align: center;
+	padding-left: 5px;
 }
 
 #colorWhiteBG,#colorBlackBG {

@@ -477,17 +477,183 @@ $(document).ready(function(){
         childDiv(hsl_lChild,"hsl_lChild",i,hsl_l,Math.round(L));
         //.end Display HSL values
 
-        //Display colors with WHITE background
+        //Display colors on WHITE background
         var divLeftWhiteBG;
         childDivColor(divLeftWhiteBG,"divLeftWhiteBG",i,leftColumnWhiteBG,"#" + rgbToHex(R8, G8, B8));
         var gray = Math.round((0.299 * R8) + (0.587 * G8) + (0.114 * B8)); // Calculate grayscale equivalent
-        // Displaying GRAYSCALE equivalent on WHITE background        
-        var divLeftWhiteBG = $('#divLeftWhiteBG' + i);
+        // Displaying GRAYSCALE equivalent on WHITE background
         var divRightWhiteBG;
         childDivColor(divRightWhiteBG,"divRightWhiteBG",i,rightColumnWhiteBG,"#" + rgbToHex(gray, gray, gray));
-        //.end Display colors with WHITE background
+        //.end Display colors on WHITE background
+
+        //Display colors on WHITE background
+        var divLeftBlackBG;
+        childDivColor(divLeftBlackBG,"divLeftBlackBG",i,leftColumnBlackBG,"#" + rgbToHex(R8, G8, B8));
+        // Displaying GRAYSCALE equivalent on BLACK background
+        var divRightBlackBG;
+        childDivColor(divRightBlackBG,"divRightBlackBG",i,rightColumnBlackBG,"#" + rgbToHex(gray, gray, gray));
+        //.end Display colors on BLACK background
+
+        // Display RGB8 values
+        var rgb8_rChild;
+        childDiv(rgb8_rChild,"rgb8_rChild",i,rgb8_r,R8);
+        var rgb8_gChild;
+        childDiv(rgb8_gChild,"rgb8_gChild",i,rgb8_g,G8);
+        var rgb8_bChild;
+        childDiv(rgb8_bChild,"rgb8_bChild",i,rgb8_b,B8);
+        // end. Display RGB8 values
+
+        // display RGB values
+        var rgb_rChild;
+        childDiv(rgb_rChild,"rgb_rChild",i,rgb_r,Math.round(R8 * (100 / 255)));        
+        var rgb_gChild;
+        childDiv(rgb_gChild,"rgb_gChild",i,rgb_g,Math.round(G8 * (100 / 255)));
+        var rgb_bChild;
+        childDiv(rgb_bChild,"rgb_bChild",i,rgb_b,Math.round(B8 * (100 / 255)));
+        // end. display RGB values
+
+        //function call HCY
+        HCY = RGBtoHCY(H, R8, G8, B8);
+        var hcyH = HCY[0];
+        var hcyC = HCY[1];
+        var hcyY = HCY[2];
+
+        //display HCY color space
+        var hcy_hChild;
+        childDiv(hcy_hChild,"hcy_hChild",i,hcy_h,hcyH);        
+        var hcy_cChild;
+        childDiv(hcy_cChild,"hcy_cChild",i,hcy_c,hcyC);
+        var hcy_yChild;
+        childDiv(hcy_yChild,"hcy_yChild",i,hcy_y,hcyY);
+        // end. display HCY color space
+
+        // user color converted to XYZ color space
+        XYZ = RGBtoXYZ(R8, G8, B8);
+        var colX = XYZ[0];
+        var colY = XYZ[1];
+        var colZ = XYZ[2];
+
+        // converting XYZ space to LAB color space
+        LAB = XYZtoLAB(colX, colY, colZ);
+        var labL = LAB[0];
+        var labA = LAB[1];
+        var labB = LAB[2];
+
+        // display LAB color space
+        var lab_lChild;
+        childDiv(lab_lChild,"lab_lChild",i,lab_l,labL);
+        var lab_aChild;
+        childDiv(lab_aChild,"lab_aChild",i,lab_a,labA);
+        var lab_bChild;
+        childDiv(lab_bChild,"lab_bChild",i,lab_b,labB);
+        //end. display LAB color space
+
+        //Converting LAB to LCh(ab) color space
+        LCHab = LABtoLCHab(labL, labA, labB);
+        var LCHabL = LCHab[0];
+        var LCHabC = LCHab[1];
+        var LCHabH = LCHab[2];
+
+        // display LCh(ab) color space
+        var LCHabLChild;
+        childDiv(LCHabLChild,"LCHabLChild",i,lchAB_l,LCHabL);
+        var LCHabAChild;
+        childDiv(LCHabAChild,"LCHabAChild",i,lchAB_c,LCHabC);       
+        var LCHabHChild;
+        childDiv(LCHabHChild,"LCHabHChild",i,lchAB_h,LCHabH);
+        // end. display LCh(ab) color space
+
+        // display LCh(99) color space
+        var LCH99LChild;
+        childDiv(LCH99LChild,"LCH99LChild",i,lch99_l,Math.round(L));
+        var LCH99CChild;
+        childDiv(LCH99CChild,"LCH99CChild",i,lch99_c,Math.round(S));       
+        var LCH99HChild;
+        childDiv(LCH99HChild,"LCH99HChild",i,lch99_h,Math.round(H));
+        // end. display LCh(99) color space
+
+        // converting XYZ to LUV color space
+        LUV = XYZtoLUV(colX, colY, colZ);
+        var luvL = LUV[0];
+        var luvU = LUV[1];
+        var luvV = LUV[2];
+
+        // display LUV color space
+        var luv_lChild;
+        childDiv(luv_lChild,"luv_lChild",i,luv_l,luvL);       
+        var luv_uChild;
+        childDiv(luv_uChild,"luv_uChild",i,luv_u,luvU);
+        var luv_vChild;
+        childDiv(luv_vChild,"luv_vChild",i,luv_v,luvV);
+        //end. display LUV color space
+
+        //Converting LUV to LCh(uv) color space
+        LCHuv = LUVtoLCHuv(luvL, luvU, luvV);
+        var LCHuvL = LCHuv[0];
+        var LCHuvC = LCHuv[1];
+        var LCHuvH = LCHuv[2];
+
+        // display LCh(uv) color space
+        var LCHuvLChild;
+        childDiv(LCHuvLChild,"LCHuvLChild",i,lchUV_l,LCHuvL);
+        var LCHuvCChild;
+        childDiv(LCHuvCChild,"LCHuvCChild",i,lchUV_c,LCHuvC);
+        var LCHuvHChild;
+        childDiv(LCHuvHChild,"LCHuvHChild",i,lchUV_h,LCHuvH);
+        //end. display LCh(uv) color space
+
+        // XYZ to LMS conversion
+        LMS = XYZtoLMS(colX, colY, colZ);
+        var lmsL = LMS[0];
+        var lmsM = LMS[1];
+        var lmsS = LMS[2];
+
+        // display LMS color space
+        var lms_lChild;
+        childDiv(lms_lChild,"lms_lChild",i,lms_l,lmsL);        
+        var lms_mChild;
+        childDiv(lms_mChild,"lms_mChild",i,lms_m,lmsM);
+        var lms_sChild;
+        childDiv(lms_sChild,"lms_sChild",i,lms_s,lmsS);
+        // .end LMS color space
+
+        // Adding colors to the color[] for Piechart
+        colors[i] = "#" + rgbToHex(R8, G8, B8);
       }
     }
+
+    // Plotting the Piechart
+    if(Math.round(pieSlice) > 36) {
+          pieSlice = 36;
+        }
+        for(var j=0;j<Math.round(pieSlice);j++) {
+          piedata[j] = Math.round(pieSlice);
+        }
+
+        var pie = d3.layout.pie()
+          .value(function(d) {
+            return d;
+          });
+
+        var arc = d3.svg.arc()
+          .outerRadius(100);
+
+        var myChart = d3.select('#pieChart').append('svg')
+            .attr('width', 250)
+            .attr('height', 250)
+            .append('g')
+            .attr('transform', 'translate(100,100)')
+            .selectAll('path').data(pie(piedata))
+            .enter().append('path')
+                    .attr('fill', function(d, i) {
+                            return colors[i];
+                    })
+                    .attr('d', arc);
+
+        var txt = d3.selectAll('svg')
+          .append('text')
+          .attr('x',5)
+          .attr('y',5);
   }
 
   function childDivString(child,str,num,parent,val) {
@@ -508,6 +674,9 @@ $(document).ready(function(){
     $('#'+str+num).css('width','40px');
     $('#'+str+num).css('font-weight','normal');
     $('#'+str+num).text(val);
+    if(num >= 35) {
+      $('#'+str+num).css('padding-bottom','80px');
+    }
   }
 
   function childDivColor(child,str,num,parent,val) {
