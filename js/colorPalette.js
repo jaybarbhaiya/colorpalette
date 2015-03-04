@@ -1,3 +1,5 @@
+var count = 0;
+
 $(document).load(function() {
 });
 
@@ -153,10 +155,10 @@ $(document).ready(function(){
     var alternatingLuma = Math.round($('#alternatingLuma').val());
     var pieSlice = Math.round($('#pieSlice').val());
 
-    if($('#firstColorSpace').is(':checked') && hue.text() !== "" && saturation.text() !== "" && luma.text() !== "") {
-      first_h = Math.round(hue);
-      first_s = Math.round(saturation);
-      first_l = Math.round(luma);
+    if($('#firstColorSpace').is(':checked') && hue.val() !== "" && saturation.val() !== "" && luma.val() !== "") {
+      first_h = Math.round(hue.val());
+      first_s = Math.round(saturation.val());
+      first_l = Math.round(luma.val());
     } else if ($('#firstColorSpace').is(':checked')) {
       if (colorSpace === "HSL") {
         first_h = 240;
@@ -413,8 +415,10 @@ $(document).ready(function(){
         if (i === 0) {
           delta[i] = Math.round(hue.val()) - hueDelta;
           if($('#hueOfOriginal').is(':checked')) {
-            if(colorSpace.val() === "LCh" || colorSpace.val() === "LCh99") {
+            if(colorSpace === "LCh" || colorSpace === "LCh99") {
               deltaH[i] = first_h - 30;
+            } else {
+              deltaH[i] = first_h;
             }
           } else {
             deltaH[i] = first_h;
@@ -624,36 +628,28 @@ $(document).ready(function(){
 
     // Plotting the Piechart
     if(Math.round(pieSlice) > 36) {
-          pieSlice = 36;
-        }
-        for(var j=0;j<Math.round(pieSlice);j++) {
-          piedata[j] = Math.round(pieSlice);
-        }
+      pieSlice = 36;
+    }
+    for(var j=0;j<Math.round(pieSlice);j++) {
+      piedata[j] = Math.round(pieSlice);
+    }
 
-        var pie = d3.layout.pie()
-          .value(function(d) {
-            return d;
-          });
-
-        var arc = d3.svg.arc()
-          .outerRadius(100);
-
-        var myChart = d3.select('#pieChart').append('svg')
-            .attr('width', 250)
-            .attr('height', 250)
-            .append('g')
-            .attr('transform', 'translate(100,100)')
-            .selectAll('path').data(pie(piedata))
-            .enter().append('path')
-                    .attr('fill', function(d, i) {
-                            return colors[i];
-                    })
-                    .attr('d', arc);
-
-        var txt = d3.selectAll('svg')
-          .append('text')
-          .attr('x',5)
-          .attr('y',5);
+    var h = 300;
+    var w = 300;
+    var r = h/3;
+    var vis = d3.select('#pieChart').append("svg:svg").data([piedata]).attr('id','pie'+count)
+              .attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
+    var pie = d3.layout.pie().value(function(d){return d;});
+    var arc = d3.svg.arc().outerRadius(r);
+    var arcs = vis.selectAll("g.slice").data(pie).enter().append("svg:g").attr("class", "slice");
+    arcs.append("svg:path")
+      .attr("fill", function(d, i){
+        return colors[i];
+    })
+     .attr("d", function (d) {
+      return arc(d);
+    });
+    count = count + 1;
   }
 
   function childDivString(child,str,num,parent,val) {
@@ -932,4 +928,9 @@ $(document).ready(function(){
     var b8 = bb * 2.55;
     return [Math.min(255, Math.max(0,Math.round(r8))), Math.min(255, Math.max(0, Math.round(g8))), Math.min(255, Math.max(0, Math.round(b8)))];
   }
+});
+
+
+$(document).on('click','svg',function() {
+  $('#' + $(this).attr('id')).remove();
 });
