@@ -1,8 +1,5 @@
 var count = 0;
 
-$(document).load(function() {
-});
-
 $(document).ready(function(){
   $('#sequentialParameter').hide();
 
@@ -622,10 +619,93 @@ $(document).ready(function(){
         // .end LMS color space
 
         // Adding colors to the color[] for Piechart
-        colors[i] = "#" + rgbToHex(R8, G8, B8);
+        if($('#colorBlind').val() === "Disable") {
+          colors[i] = "#" + rgbToHex(R8, G8, B8);
+        } else if($('#colorBlind').val() === "Protanope") {
+          l = (0.0 * lmsL) + (2.02344 * lmsM) + (-2.52581 * lmsS);
+          m = (0.0 * lmsL) + (1.0 * lmsM) + (0.0 * lmsS);
+          s = (0.0 * lmsL) + (0.0 * lmsM) + (1.0 * lmsS);
+          //transform LMS to RGB
+          rgbDeltonize = LMStoRGB(l, m, s);
+          //Isolate invisible colors to color vision deficiency (calculate error matrix)
+          rgbDeltonize[0] = R8 - rgbDeltonize[0];
+          rgbDeltonize[1] = G8 - rgbDeltonize[1];
+          rgbDeltonize[2] = B8 - rgbDeltonize[2];
+          // Shift colors towards visible spectrum (apply error modifications)
+          RR = (0.0 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          GG = (0.7 * rgbDeltonize[0]) + (1.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          BB = (0.7 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (1.0 * rgbDeltonize[2]);
+          // Add compensation to original values
+          R_new = RR + R8;
+          G_new = GG + G8;
+          B_new = BB + B8;
+          // Clamp values
+          if(R_new < 0) R_new = 0;
+          if(R_new > 255) R_new = 255;
+          if(G_new < 0) G_new = 0;
+          if(G_new > 255) G_new = 255;
+          if(B_new < 0) B_new = 0;
+          if(B_new > 255) B_new = 255;
+          // Record Value
+          colors[i] = "#" + rgbToHex(R_new >> 0, G_new >> 0, B_new >> 0);
+        } else if($('#colorBlind').val() === "Deuteranope") {
+          l = (1.0 * lmsL) + (0.0 * lmsM) + (0.0 * lmsS);
+          m = (0.494207 * lmsL) + (0.0 * lmsM) + (1.24827 * lmsS);
+          s = (0.0 * lmsL) + (0.0 * lmsM) + (1.0 * lmsS);
+          //transform LMS to RGB
+          rgbDeltonize = LMStoRGB(l, m, s);
+          //Isolate invisible colors to color vision deficiency (calculate error matrix)
+          rgbDeltonize[0] = R8 - rgbDeltonize[0];
+          rgbDeltonize[1] = G8 - rgbDeltonize[1];
+          rgbDeltonize[2] = B8 - rgbDeltonize[2];
+          // Shift colors towards visible spectrum (apply error modifications)
+          RR = (0.0 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          GG = (0.7 * rgbDeltonize[0]) + (1.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          BB = (0.7 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (1.0 * rgbDeltonize[2]);
+          // Add compensation to original values
+          R_new = RR + R8;
+          G_new = GG + G8;
+          B_new = BB + B8;
+          // Clamp values
+          if(R_new < 0) R_new = 0;
+          if(R_new > 255) R_new = 255;
+          if(G_new < 0) G_new = 0;
+          if(G_new > 255) G_new = 255;
+          if(B_new < 0) B_new = 0;
+          if(B_new > 255) B_new = 255;
+          // Record Value
+          colors[i] = "#" + rgbToHex(R_new >> 0, G_new >> 0, B_new >> 0);
+        } else if($('#colorBlind').val() === "Tritanope") {
+          l = (1.0 * lmsL) + (0.0 * lmsM) + (0.0 * lmsS);
+          m = (0.0 * lmsL) + (1.0 * lmsM) + (0 * lmsS);
+          s = (-0.395913 * lmsL) + (0.801109 * lmsM) + (0.0 * lmsS);
+          //transform LMS to RGB
+          rgbDeltonize = LMStoRGB(l, m, s);
+          //Isolate invisible colors to color vision deficiency (calculate error matrix)
+          rgbDeltonize[0] = R8 - rgbDeltonize[0];
+          rgbDeltonize[1] = G8 - rgbDeltonize[1];
+          rgbDeltonize[2] = B8 - rgbDeltonize[2];
+          // Shift colors towards visible spectrum (apply error modifications)
+          RR = (0.0 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          GG = (0.7 * rgbDeltonize[0]) + (1.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          BB = (0.7 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (1.0 * rgbDeltonize[2]);
+          // Add compensation to original values
+          R_new = RR + R8;
+          G_new = GG + G8;
+          B_new = BB + B8;
+          // Clamp values
+          if(R_new < 0) R_new = 0;
+          if(R_new > 255) R_new = 255;
+          if(G_new < 0) G_new = 0;
+          if(G_new > 255) G_new = 255;
+          if(B_new < 0) B_new = 0;
+          if(B_new > 255) B_new = 255;
+          // Record Value
+          colors[i] = "#" + rgbToHex(R_new >> 0, G_new >> 0, B_new >> 0);
+        }
       }
-    }
-
+    } 
+    
     // Plotting the Piechart
     if(Math.round(pieSlice) > 36) {
       pieSlice = 36;
@@ -928,8 +1008,14 @@ $(document).ready(function(){
     var b8 = bb * 2.55;
     return [Math.min(255, Math.max(0,Math.round(r8))), Math.min(255, Math.max(0, Math.round(g8))), Math.min(255, Math.max(0, Math.round(b8)))];
   }
-});
 
+  function LMStoRGB(l, m, s) {
+    R = (0.0809444479 * l) + (-0.130504409 * m) + (0.116721066 * s);
+    G = (-0.0102485335 * l) + (0.0540193266 * m) + (-0.113614708 * s);
+    B = (-0.000365296938 * l) + (-0.00412161469 * m) + (0.693511405 * s);
+    return [Math.round(R), Math.round(G), Math.round(B)];
+  }
+});
 
 $(document).on('click','svg',function() {
   $('#' + $(this).attr('id')).remove();
