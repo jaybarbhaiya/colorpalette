@@ -190,7 +190,7 @@ $(document).ready(function(){
         }
         if(rInit === gInit && rInit === bInit) {
             first_h = 0;
-        } else if(M === gInit) {
+        } else if(M === rInit) {
             first_h = (((gInit - bInit)/C)%6) * 60;
         } else if(M === gInit) {
             first_h = (2+ ((bInit - rInit) / C)) * 60;
@@ -408,7 +408,7 @@ $(document).ready(function(){
     colorBlackBG.css("background-color","#000");
 
     if($('#qualitative').is(':checked')) {
-      for (i = 0; i < 36; i++) {
+      for (i = 0; i < pieSlice; i++) {
         if (i === 0) {
           delta[i] = Math.round(hue.val()) - hueDelta;
           if($('#hueOfOriginal').is(':checked')) {
