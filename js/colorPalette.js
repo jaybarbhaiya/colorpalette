@@ -1,4 +1,5 @@
 var count = 0;
+var grad = 57.296;
 
 $(document).ready(function(){
   $('#sequentialParameter').hide();
@@ -207,7 +208,7 @@ $(document).ready(function(){
         first_s = C * 100;
         if (rInit === gInit && rInit === bInit) {
             first_h = 0;
-        } else if (M === gInit) {
+        } else if (M === rInit) {
             first_h = (((gInit - bInit) / C) % 6) * 60;
         } else if (M === gInit) {
             first_h = (2 + ((bInit - rInit) / C)) * 60;
@@ -247,7 +248,7 @@ $(document).ready(function(){
             first_h = 0;
         }
         else {
-            first_h = (Math.atan(bb/aa)*(180/Math.PI) + 180) % 360;
+          first_h = (Math.atan(bb/aa)*grad+180*(aa<0)) % 360;
         }
       } else if (colorSpace === "LCh99") {
         var rInit = redInput * (100 / 255);
@@ -295,7 +296,7 @@ $(document).ready(function(){
             first_h = 0;
         }
         else {
-            first_h = (Math.atan(b99/a99)*(180/Math.PI) + 180) % 360;
+            first_h = (Math.atan(b99/a99)*grad+180*(a99<0)) % 360;
         }
       }
     }
@@ -411,7 +412,7 @@ $(document).ready(function(){
       for (i = 0; i < pieSlice; i++) {
         if (i === 0) {
           delta[i] = Math.round(hue.val()) - hueDelta;
-          if($('#hueOfOriginal').is(':checked')) {
+          if($('#hueOfOriginal').is(':checked') && $('#firstColorSpace').is(':checked')) {
             if(colorSpace === "LCh" || colorSpace === "LCh99") {
               deltaH[i] = first_h - 30;
             } else {
@@ -704,7 +705,32 @@ $(document).ready(function(){
           colors[i] = "#" + rgbToHex(R_new >> 0, G_new >> 0, B_new >> 0);
         }
       }
-    } 
+    } else if($('#sequential').is(':checked')) {
+      for(i = 0; i < pieSlice; i++) {
+        if (i === 0) {
+          H = first_h;
+          S = first_s;
+          L = first_l;
+          if($('#hueOfOriginal').is(':checked')) {
+            if(colorSpace === "LCh" || colorSpace === "LCh99") {
+              H = first_h - 30;
+            }
+          }
+          if($('#alteringDelta').is(':checked') && first_h < 240) {
+          if (first_h <= 120) {
+              H = 0.5 * first_h;
+          } else if (first_h <= 180) {
+              H = 60 + (first_h - 120);
+          } else {
+              H = 120 + 2 * (first_h - 180);
+          }
+          } 
+          S = Math.min(100, Math.max(0, first_s - chromaDelta * i + chromaDeltaByHue * (1 - Math.cos((first_h - hueOfOriginalChroma) * 0.0175)) * 0.5 + alternatingChroma * (0.0175 % 2)));
+          L = Math.min(100, Math.max(0, first_l - lumaDelta * i + lumaDeltaByHue * (1 - Math.cos((first_h - hueOfOriginalLuma) * 0.0175)) * 0.5 + alternatingLuma * (0.0175 % 2)));
+          console.log(H,S,L);
+        }
+      }
+    }
     
     // Plotting the Piechart
     if(Math.round(pieSlice) > 36) {
@@ -838,7 +864,6 @@ $(document).ready(function(){
   }
 
   function LUVtoLCHuv(l,u,v) {
-    var grad = 57.296;
     var L = l;
     var C = Math.sqrt(Math.pow(u,2) + Math.pow(v,2));
     var H = 0;
