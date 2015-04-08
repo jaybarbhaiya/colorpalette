@@ -124,7 +124,7 @@ $(document).ready(function(){
   }
 
   function generatePalette() {
-    var first_h, first_s, first_l, H, S, L, i, checked;
+    var first_h, first_s, first_l, H, S, L, i, checked, endH, endL, endS, diff;
     var piedata = [];
     var colors = [];
     var delta = new Array();
@@ -711,24 +711,302 @@ $(document).ready(function(){
           H = first_h;
           S = first_s;
           L = first_l;
-          if($('#hueOfOriginal').is(':checked')) {
+          if($('#hueOfOriginal').is(':checked') && $('#firstColorSpace').is(':checked')) {
             if(colorSpace === "LCh" || colorSpace === "LCh99") {
               H = first_h - 30;
             }
           }
-          if($('#alteringDelta').is(':checked') && first_h < 240) {
-          if (first_h <= 120) {
-              H = 0.5 * first_h;
-          } else if (first_h <= 180) {
-              H = 60 + (first_h - 120);
+          if($('#endH').val() !== "" && $('#endS').val() !== "" && $('#endL').val() !== "") {
+            endH = Math.round($('#endH').val());
+            endS = Math.round($('#endS').val());
+            endL = Math.round($('#endL').val());
           } else {
-              H = 120 + 2 * (first_h - 180);
+            endH = H;
+            endS = S;
+            endL = 100;        
           }
-          } 
-          S = Math.min(100, Math.max(0, first_s - chromaDelta * i + chromaDeltaByHue * (1 - Math.cos((first_h - hueOfOriginalChroma) * 0.0175)) * 0.5 + alternatingChroma * (0.0175 % 2)));
-          L = Math.min(100, Math.max(0, first_l - lumaDelta * i + lumaDeltaByHue * (1 - Math.cos((first_h - hueOfOriginalLuma) * 0.0175)) * 0.5 + alternatingLuma * (0.0175 % 2)));
-          console.log(H,S,L);
+          diff = (endL - L)/pieSlice; 
+          if($('#alteringDelta').is(':checked') && deltaH[i] < 240) {
+            if (deltaH[i] <= 120) {
+                H = 0.5 * first_h;
+            } else if (first_h <= 180) {
+                H = 60 + (first_h - 120);
+            } else {
+                H = 120 + 2 * (first_h - 180);
+            }
+          }
+          S = Math.min(100, Math.max(0, first_s - chromaDelta * i + chromaDeltaByHue * (1 - Math.cos((H - hueOfOriginalChroma) * 0.0175)) * 0.5 + alternatingChroma * (0.0175 % 2)));
+          L = Math.min(100, Math.max(0, first_l - lumaDelta * i + lumaDeltaByHue * (1 - Math.cos((H - hueOfOriginalLuma) * 0.0175)) * 0.5 + alternatingLuma * (0.0175 % 2)));
+        } 
+        
+        
+  
+        //Calculating RGB8 from HSL
+        if(colorSpace === "HSL") {
+          RGB8 = RGB8forHSL(H, S, L);
+          var R8 = RGB8[0];
+          var G8 = RGB8[1];
+          var B8 = RGB8[2];
+        } else if(colorSpace === "HCY") {
+          RGB8 = RGB8forHCY(H, S, L);
+          var R8 = RGB8[0];
+          var G8 = RGB8[1];
+          var B8 = RGB8[2];
+        } else if (colorSpace === "LCh") {
+          RGB8 = RGB8forLCh(H, S, L);
+          var R8 = RGB8[0];
+          var G8 = RGB8[1];
+          var B8 = RGB8[2];
+        } else if(colorSpace === "LCh99") {
+          RGB8 = RGB8forLCh99(H, S, L);
+          var R8 = RGB8[0];
+          var G8 = RGB8[1];
+          var B8 = RGB8[2];
         }
+
+        //display the HEX values
+        var hexColor;
+        childDivString(hexColor,"hexColor",i,toHex,"#" + rgbToHex(R8,G8,B8));
+
+        //display the INDEX values
+        var indexChild;
+        childDivString(indexChild,"indexChild",i,index,i);
+
+        //Display HSL values
+        var hsl_hChild;
+        childDiv(hsl_hChild,"hsl_hChild",i,hsl_h,Math.round(H));
+        var hsl_sChild;
+        childDiv(hsl_sChild,"hsl_sChild",i,hsl_s,Math.round(S));
+        var hsl_lChild;
+        childDiv(hsl_lChild,"hsl_lChild",i,hsl_l,Math.round(L));
+        //.end Display HSL values
+
+        //Display colors on WHITE background
+        var divLeftWhiteBG;
+        childDivColor(divLeftWhiteBG,"divLeftWhiteBG",i,leftColumnWhiteBG,"#" + rgbToHex(R8, G8, B8));
+        var gray = Math.round((0.299 * R8) + (0.587 * G8) + (0.114 * B8)); // Calculate grayscale equivalent
+        // Displaying GRAYSCALE equivalent on WHITE background
+        var divRightWhiteBG;
+        childDivColor(divRightWhiteBG,"divRightWhiteBG",i,rightColumnWhiteBG,"#" + rgbToHex(gray, gray, gray));
+        //.end Display colors on WHITE background
+
+        //Display colors on WHITE background
+        var divLeftBlackBG;
+        childDivColor(divLeftBlackBG,"divLeftBlackBG",i,leftColumnBlackBG,"#" + rgbToHex(R8, G8, B8));
+        // Displaying GRAYSCALE equivalent on BLACK background
+        var divRightBlackBG;
+        childDivColor(divRightBlackBG,"divRightBlackBG",i,rightColumnBlackBG,"#" + rgbToHex(gray, gray, gray));
+        //.end Display colors on BLACK background
+
+        // Display RGB8 values
+        var rgb8_rChild;
+        childDiv(rgb8_rChild,"rgb8_rChild",i,rgb8_r,R8);
+        var rgb8_gChild;
+        childDiv(rgb8_gChild,"rgb8_gChild",i,rgb8_g,G8);
+        var rgb8_bChild;
+        childDiv(rgb8_bChild,"rgb8_bChild",i,rgb8_b,B8);
+        // end. Display RGB8 values
+
+        // display RGB values
+        var rgb_rChild;
+        childDiv(rgb_rChild,"rgb_rChild",i,rgb_r,Math.round(R8 * (100 / 255)));        
+        var rgb_gChild;
+        childDiv(rgb_gChild,"rgb_gChild",i,rgb_g,Math.round(G8 * (100 / 255)));
+        var rgb_bChild;
+        childDiv(rgb_bChild,"rgb_bChild",i,rgb_b,Math.round(B8 * (100 / 255)));
+        // end. display RGB values
+
+        //function call HCY
+        HCY = RGBtoHCY(H, R8, G8, B8);
+        var hcyH = HCY[0];
+        var hcyC = HCY[1];
+        var hcyY = HCY[2];
+
+        //display HCY color space
+        var hcy_hChild;
+        childDiv(hcy_hChild,"hcy_hChild",i,hcy_h,hcyH);        
+        var hcy_cChild;
+        childDiv(hcy_cChild,"hcy_cChild",i,hcy_c,hcyC);
+        var hcy_yChild;
+        childDiv(hcy_yChild,"hcy_yChild",i,hcy_y,hcyY);
+        // end. display HCY color space
+
+        // user color converted to XYZ color space
+        XYZ = RGBtoXYZ(R8, G8, B8);
+        var colX = XYZ[0];
+        var colY = XYZ[1];
+        var colZ = XYZ[2];
+
+        // converting XYZ space to LAB color space
+        LAB = XYZtoLAB(colX, colY, colZ);
+        var labL = LAB[0];
+        var labA = LAB[1];
+        var labB = LAB[2];
+
+        // display LAB color space
+        var lab_lChild;
+        childDiv(lab_lChild,"lab_lChild",i,lab_l,labL);
+        var lab_aChild;
+        childDiv(lab_aChild,"lab_aChild",i,lab_a,labA);
+        var lab_bChild;
+        childDiv(lab_bChild,"lab_bChild",i,lab_b,labB);
+        //end. display LAB color space
+
+        //Converting LAB to LCh(ab) color space
+        LCHab = LABtoLCHab(labL, labA, labB);
+        var LCHabL = LCHab[0];
+        var LCHabC = LCHab[1];
+        var LCHabH = LCHab[2];
+
+        // display LCh(ab) color space
+        var LCHabLChild;
+        childDiv(LCHabLChild,"LCHabLChild",i,lchAB_l,LCHabL);
+        var LCHabAChild;
+        childDiv(LCHabAChild,"LCHabAChild",i,lchAB_c,LCHabC);       
+        var LCHabHChild;
+        childDiv(LCHabHChild,"LCHabHChild",i,lchAB_h,LCHabH);
+        // end. display LCh(ab) color space
+
+        // display LCh(99) color space
+        var LCH99LChild;
+        childDiv(LCH99LChild,"LCH99LChild",i,lch99_l,Math.round(L));
+        var LCH99CChild;
+        childDiv(LCH99CChild,"LCH99CChild",i,lch99_c,Math.round(S));       
+        var LCH99HChild;
+        childDiv(LCH99HChild,"LCH99HChild",i,lch99_h,Math.round(H));
+        // end. display LCh(99) color space
+
+        // converting XYZ to LUV color space
+        LUV = XYZtoLUV(colX, colY, colZ);
+        var luvL = LUV[0];
+        var luvU = LUV[1];
+        var luvV = LUV[2];
+
+        // display LUV color space
+        var luv_lChild;
+        childDiv(luv_lChild,"luv_lChild",i,luv_l,luvL);       
+        var luv_uChild;
+        childDiv(luv_uChild,"luv_uChild",i,luv_u,luvU);
+        var luv_vChild;
+        childDiv(luv_vChild,"luv_vChild",i,luv_v,luvV);
+        //end. display LUV color space
+
+        //Converting LUV to LCh(uv) color space
+        LCHuv = LUVtoLCHuv(luvL, luvU, luvV);
+        var LCHuvL = LCHuv[0];
+        var LCHuvC = LCHuv[1];
+        var LCHuvH = LCHuv[2];
+
+        // display LCh(uv) color space
+        var LCHuvLChild;
+        childDiv(LCHuvLChild,"LCHuvLChild",i,lchUV_l,LCHuvL);
+        var LCHuvCChild;
+        childDiv(LCHuvCChild,"LCHuvCChild",i,lchUV_c,LCHuvC);
+        var LCHuvHChild;
+        childDiv(LCHuvHChild,"LCHuvHChild",i,lchUV_h,LCHuvH);
+        //end. display LCh(uv) color space
+
+        // XYZ to LMS conversion
+        LMS = XYZtoLMS(colX, colY, colZ);
+        var lmsL = LMS[0];
+        var lmsM = LMS[1];
+        var lmsS = LMS[2];
+
+        // display LMS color space
+        var lms_lChild;
+        childDiv(lms_lChild,"lms_lChild",i,lms_l,lmsL);        
+        var lms_mChild;
+        childDiv(lms_mChild,"lms_mChild",i,lms_m,lmsM);
+        var lms_sChild;
+        childDiv(lms_sChild,"lms_sChild",i,lms_s,lmsS);
+        // .end LMS color space
+
+        // Adding colors to the color[] for Piechart
+        if($('#colorBlind').val() === "Disable") {
+          colors[i] = "#" + rgbToHex(R8, G8, B8);
+        } else if($('#colorBlind').val() === "Protanope") {
+          l = (0.0 * lmsL) + (2.02344 * lmsM) + (-2.52581 * lmsS);
+          m = (0.0 * lmsL) + (1.0 * lmsM) + (0.0 * lmsS);
+          s = (0.0 * lmsL) + (0.0 * lmsM) + (1.0 * lmsS);
+          //transform LMS to RGB
+          rgbDeltonize = LMStoRGB(l, m, s);
+          //Isolate invisible colors to color vision deficiency (calculate error matrix)
+          rgbDeltonize[0] = R8 - rgbDeltonize[0];
+          rgbDeltonize[1] = G8 - rgbDeltonize[1];
+          rgbDeltonize[2] = B8 - rgbDeltonize[2];
+          // Shift colors towards visible spectrum (apply error modifications)
+          RR = (0.0 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          GG = (0.7 * rgbDeltonize[0]) + (1.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          BB = (0.7 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (1.0 * rgbDeltonize[2]);
+          // Add compensation to original values
+          R_new = RR + R8;
+          G_new = GG + G8;
+          B_new = BB + B8;
+          // Clamp values
+          if(R_new < 0) R_new = 0;
+          if(R_new > 255) R_new = 255;
+          if(G_new < 0) G_new = 0;
+          if(G_new > 255) G_new = 255;
+          if(B_new < 0) B_new = 0;
+          if(B_new > 255) B_new = 255;
+          // Record Value
+          colors[i] = "#" + rgbToHex(R_new >> 0, G_new >> 0, B_new >> 0);
+        } else if($('#colorBlind').val() === "Deuteranope") {
+          l = (1.0 * lmsL) + (0.0 * lmsM) + (0.0 * lmsS);
+          m = (0.494207 * lmsL) + (0.0 * lmsM) + (1.24827 * lmsS);
+          s = (0.0 * lmsL) + (0.0 * lmsM) + (1.0 * lmsS);
+          //transform LMS to RGB
+          rgbDeltonize = LMStoRGB(l, m, s);
+          //Isolate invisible colors to color vision deficiency (calculate error matrix)
+          rgbDeltonize[0] = R8 - rgbDeltonize[0];
+          rgbDeltonize[1] = G8 - rgbDeltonize[1];
+          rgbDeltonize[2] = B8 - rgbDeltonize[2];
+          // Shift colors towards visible spectrum (apply error modifications)
+          RR = (0.0 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          GG = (0.7 * rgbDeltonize[0]) + (1.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          BB = (0.7 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (1.0 * rgbDeltonize[2]);
+          // Add compensation to original values
+          R_new = RR + R8;
+          G_new = GG + G8;
+          B_new = BB + B8;
+          // Clamp values
+          if(R_new < 0) R_new = 0;
+          if(R_new > 255) R_new = 255;
+          if(G_new < 0) G_new = 0;
+          if(G_new > 255) G_new = 255;
+          if(B_new < 0) B_new = 0;
+          if(B_new > 255) B_new = 255;
+          // Record Value
+          colors[i] = "#" + rgbToHex(R_new >> 0, G_new >> 0, B_new >> 0);
+        } else if($('#colorBlind').val() === "Tritanope") {
+          l = (1.0 * lmsL) + (0.0 * lmsM) + (0.0 * lmsS);
+          m = (0.0 * lmsL) + (1.0 * lmsM) + (0 * lmsS);
+          s = (-0.395913 * lmsL) + (0.801109 * lmsM) + (0.0 * lmsS);
+          //transform LMS to RGB
+          rgbDeltonize = LMStoRGB(l, m, s);
+          //Isolate invisible colors to color vision deficiency (calculate error matrix)
+          rgbDeltonize[0] = R8 - rgbDeltonize[0];
+          rgbDeltonize[1] = G8 - rgbDeltonize[1];
+          rgbDeltonize[2] = B8 - rgbDeltonize[2];
+          // Shift colors towards visible spectrum (apply error modifications)
+          RR = (0.0 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          GG = (0.7 * rgbDeltonize[0]) + (1.0 * rgbDeltonize[1]) + (0.0 * rgbDeltonize[2]);
+          BB = (0.7 * rgbDeltonize[0]) + (0.0 * rgbDeltonize[1]) + (1.0 * rgbDeltonize[2]);
+          // Add compensation to original values
+          R_new = RR + R8;
+          G_new = GG + G8;
+          B_new = BB + B8;
+          // Clamp values
+          if(R_new < 0) R_new = 0;
+          if(R_new > 255) R_new = 255;
+          if(G_new < 0) G_new = 0;
+          if(G_new > 255) G_new = 255;
+          if(B_new < 0) B_new = 0;
+          if(B_new > 255) B_new = 255;
+          // Record Value
+          colors[i] = "#" + rgbToHex(R_new >> 0, G_new >> 0, B_new >> 0);
+        }
+        L = L + diff;
       }
     }
     
