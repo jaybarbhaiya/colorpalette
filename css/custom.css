@@ -32,11 +32,17 @@ svg {
 
 
 #hsl_h, #hsl_s, #hsl_l,
-#rgbSpace,#rgb8Space,#hcy,#lab,#lchAB,#lch99,#luv,#lchUV,
-#rgbHeader,#rgb8Header,#hcyHeader,#labHeader,#lchABHeader,#lch99Header,#luvHeader,#lchUVHeader,#lmsHeader  {
+#rgbSpace,#rgb8Space,#hcy,#lab,#lchAB,#lch99,#luv,#lchUV,#lms {
 	float:left;
 	text-align: center;
 	padding-left: 5px;
+}
+
+#rgbHeader,#rgb8Header,#hcyHeader,#labHeader,#lchABHeader,#lch99Header,#luvHeader,#lchUVHeader,#lmsHeader {
+	float:left;
+	position: absolute;
+	text-align: center;
+	padding-left: 2.2%;
 }
 
 #colorWhiteBG,#colorBlackBG {
