@@ -24,21 +24,21 @@ svg {
 #lch99_l,#lch99_c,#lch99_h,
 #luv_l,#luv_u,#luv_v,
 #lchUV_l,#lchUV_c,#lchUV_h,
-#lms_l,#lms_m,#lms_s {
+#lms_l,#lms_m,#lms_s,
+#hslCalc_h,#hslCalc_s,#hslCalc_l {
 	float:left;
 	text-align: center;
 	margin-top: 20px;
 }
 
 
-#hsl_h, #hsl_s, #hsl_l,
-#rgbSpace,#rgb8Space,#hcy,#lab,#lchAB,#lch99,#luv,#lchUV,#lms {
+#hsl_h, #hsl_s, #hsl_l, #rgbSpace,#rgb8Space,#hcy,#lab,#lchAB,#lch99, #luv,#lchUV,#lms,#hslCalc {
 	float:left;
 	text-align: center;
 	padding-left: 5px;
 }
 
-#rgbHeader,#rgb8Header,#hcyHeader,#labHeader,#lchABHeader,#lch99Header,#luvHeader,#lchUVHeader,#lmsHeader {
+#rgbHeader,#rgb8Header,#hcyHeader,#labHeader,#lchABHeader,#lch99Header,#luvHeader,#lchUVHeader,#lmsHeader,#hslCalcHeader {
 	float:left;
 	position: absolute;
 	text-align: center;

@@ -4,6 +4,8 @@ var grad = 57.296;
 $(document).ready(function(){
   $('#sequentialParameter').hide();
 
+  $('#first').hide();
+
   disableFirst();
 
   $('#monotoneDelta').click(function(){
@@ -192,7 +194,7 @@ $(document).ready(function(){
         if(rInit === gInit && rInit === bInit) {
             first_h = 0;
         } else if(M === rInit) {
-            first_h = (((gInit - bInit)/C)%6) * 60;
+            first_h = math.mod(((gInit - bInit)/C),6) * 60;
         } else if(M === gInit) {
             first_h = (2+ ((bInit - rInit) / C)) * 60;
         } else {
@@ -209,7 +211,7 @@ $(document).ready(function(){
         if (rInit === gInit && rInit === bInit) {
             first_h = 0;
         } else if (M === rInit) {
-            first_h = (((gInit - bInit) / C) % 6) * 60;
+            first_h = math.mod(((gInit - bInit) / C), 6) * 60;
         } else if (M === gInit) {
             first_h = (2 + ((bInit - rInit) / C)) * 60;
         } else {
@@ -248,7 +250,7 @@ $(document).ready(function(){
             first_h = 0;
         }
         else {
-          first_h = (Math.atan(bb/aa)*grad+180*(aa<0)) % 360;
+          first_h = math.mod((Math.atan(bb/aa)*grad+180*(aa<0)),360);
         }
       } else if (colorSpace === "LCh99") {
         var rInit = redInput * (100 / 255);
@@ -296,7 +298,7 @@ $(document).ready(function(){
             first_h = 0;
         }
         else {
-            first_h = (Math.atan(b99/a99)*grad+180*(a99<0)) % 360;
+            first_h = math.mod((Math.atan(b99/a99)*grad+180*(a99<0)),360);
         }
       }
     }
@@ -317,6 +319,11 @@ $(document).ready(function(){
     var rgb_r = $('#rgb_r');
     var rgb_g = $('#rgb_g');
     var rgb_b = $('#rgb_b');
+
+    var hslCalcHeader = $('#hslCalcHeader');
+    var hslCalc_h = $('#hslCalc_h');
+    var hslCalc_s = $('#hslCalc_s');
+    var hslCalc_l = $('#hslCalc_l');
 
     var hcyHeader = $('#hcyHeader');
     var hcy_h = $('#hcy_h');
@@ -370,6 +377,11 @@ $(document).ready(function(){
     rgb_g.text("G").css("font-weight","Bold");
     rgb_b.text("B").css("font-weight","Bold");
 
+    hslCalcHeader.text("HSL").css("font-weight","Bold");
+    hslCalc_h.text("H").css("font-weight","Bold");
+    hslCalc_s.text("S").css("font-weight","Bold");
+    hslCalc_l.text("L").css("font-weight","Bold");
+
     hcyHeader.text("HCY").css("font-weight","Bold");
     hcy_h.text("H").css("font-weight","Bold");
     hcy_c.text("C").css("font-weight","Bold");
@@ -422,8 +434,8 @@ $(document).ready(function(){
             deltaH[i] = first_h;
           }
         } else {
-          delta[i] = (delta[i - 1] + hueDelta) % 360;
-          deltaH[i] = (deltaH[i - 1] + hueDelta) % 360;
+          delta[i] = math.mod((delta[i - 1] + hueDelta),360);
+          deltaH[i] = math.mod((deltaH[i - 1] + hueDelta),360);
         }
         if($('#alteringDelta').is(':checked') && deltaH[i] < 240) {
           if (deltaH[i] <= 120) {
@@ -436,8 +448,8 @@ $(document).ready(function(){
         } else {
            H = deltaH[i];
         }
-        S = Math.min(100, Math.max(0, first_s - chromaDelta * i + chromaDeltaByHue * (1 - Math.cos((deltaH[i] - hueOfOriginalChroma) * 0.0175)) * 0.5 + alternatingChroma * (0.0175 % 2)));
-        L = Math.min(100, Math.max(0, first_l - lumaDelta * i + lumaDeltaByHue * (1 - Math.cos((deltaH[i] - hueOfOriginalLuma) * 0.0175)) * 0.5 + alternatingLuma * (0.0175 % 2)));
+        S = Math.min(100, Math.max(0, first_s - chromaDelta * i + chromaDeltaByHue * (1 - Math.cos((deltaH[i] - hueOfOriginalChroma) * 0.0175)) * 0.5 + alternatingChroma * math.mod(0.0175,2)));
+        L = Math.min(100, Math.max(0, first_l - lumaDelta * i + lumaDeltaByHue * (1 - Math.cos((deltaH[i] - hueOfOriginalLuma) * 0.0175)) * 0.5 + alternatingLuma * math.mod(0.0175,2)));
 
         //Calculating RGB8 from HSL
         if(colorSpace === "HSL") {
@@ -462,9 +474,28 @@ $(document).ready(function(){
           var B8 = RGB8[2];
         }
 
+        // user color converted to XYZ color space
+        XYZ = RGBtoXYZ(R8, G8, B8);
+        var colX = XYZ[0];
+        var colY = XYZ[1];
+        var colZ = XYZ[2];
+
+        // XYZ to LMS conversion
+        LMS = XYZtoLMS(colX, colY, colZ);
+        var lmsL = LMS[0];
+        var lmsM = LMS[1];
+        var lmsS = LMS[2];
+
+        // Adding colors to the color[] for Piechart
+        daltaRGB = daltonize($('#colorBlind').val(),lmsL, lmsM, lmsS, R8, G8,B8);
+        colors[i] = "#" + rgbToHex(daltaRGB[0], daltaRGB[1] , daltaRGB[2]);
+        R8 = daltaRGB[0];
+        G8 = daltaRGB[1];
+        B8 = daltaRGB[2];
+
         //display the HEX values
         var hexColor;
-        childDivString(hexColor,"hexColor",i,toHex,"#" + rgbToHex(R8,G8,B8));
+        childDivString(hexColor,"hexColor",i,toHex,"#" + rgbToHex(R8, G8, B8));
 
         //display the INDEX values
         var indexChild;
@@ -514,6 +545,17 @@ $(document).ready(function(){
         childDiv(rgb_bChild,"rgb_bChild",i,rgb_b,Math.round(B8 * (100 / 255)));
         // end. display RGB values
 
+        //Convert RGB colors to HSL color scheme
+        HSL = RGBtoHSL(Math.round(R8 * (100 / 255)), Math.round(G8 * (100 / 255)), Math.round(B8 * (100 / 255)));
+        // display HSL values
+        var hslCalc_hChild;
+        childDiv(hslCalc_hChild,"hslCalc_hChild",i,hslCalc_h,HSL[0]);        
+        var hslCalc_sChild;
+        childDiv(hslCalc_sChild,"hslCalc_sChild",i,hslCalc_s,HSL[1]);
+        var hslCalc_lChild;
+        childDiv(hslCalc_lChild,"hslCalc_lChild",i,hslCalc_l,HSL[2]);
+        // end. display HSL values
+
         //function call HCY
         HCY = RGBtoHCY(H, R8, G8, B8);
         var hcyH = HCY[0];
@@ -528,12 +570,6 @@ $(document).ready(function(){
         var hcy_yChild;
         childDiv(hcy_yChild,"hcy_yChild",i,hcy_y,hcyY);
         // end. display HCY color space
-
-        // user color converted to XYZ color space
-        XYZ = RGBtoXYZ(R8, G8, B8);
-        var colX = XYZ[0];
-        var colY = XYZ[1];
-        var colZ = XYZ[2];
 
         // converting XYZ space to LAB color space
         LAB = XYZtoLAB(colX, colY, colZ);
@@ -604,12 +640,6 @@ $(document).ready(function(){
         childDiv(LCHuvHChild,"LCHuvHChild",i,lchUV_h,LCHuvH);
         //end. display LCh(uv) color space
 
-        // XYZ to LMS conversion
-        LMS = XYZtoLMS(colX, colY, colZ);
-        var lmsL = LMS[0];
-        var lmsM = LMS[1];
-        var lmsS = LMS[2];
-
         // display LMS color space
         var lms_lChild;
         childDiv(lms_lChild,"lms_lChild",i,lms_l,lmsL);        
@@ -618,14 +648,6 @@ $(document).ready(function(){
         var lms_sChild;
         childDiv(lms_sChild,"lms_sChild",i,lms_s,lmsS);
         // .end LMS color space
-
-        // Adding colors to the color[] for Piechart
-        if($('#colorBlind').val() === "Disable") {
-          colors[i] = "#" + rgbToHex(R8, G8, B8);
-        } else {
-          daltaRGB = daltonize($('#colorBlind').val(),lmsL, lmsM, lmsS, R8, B8,G8);
-          colors[i] = "#" + rgbToHex(daltaRGB[0], daltaRGB[1] , daltaRGB[2]);
-        }
       }
     } else if($('#sequential').is(':checked')) {
       for(i = 0; i < pieSlice; i++) {
@@ -657,8 +679,8 @@ $(document).ready(function(){
                 H = 120 + 2 * (first_h - 180);
             }
           }
-          S = Math.min(100, Math.max(0, first_s - chromaDelta * i + chromaDeltaByHue * (1 - Math.cos((H - hueOfOriginalChroma) * 0.0175)) * 0.5 + alternatingChroma * (0.0175 % 2)));
-          L = Math.min(100, Math.max(0, first_l - lumaDelta * i + lumaDeltaByHue * (1 - Math.cos((H - hueOfOriginalLuma) * 0.0175)) * 0.5 + alternatingLuma * (0.0175 % 2)));
+          S = Math.min(100, Math.max(0, first_s - chromaDelta * i + chromaDeltaByHue * (1 - Math.cos((H - hueOfOriginalChroma) * 0.0175)) * 0.5 + alternatingChroma * math.mod(0.0175,2)));
+          L = Math.min(100, Math.max(0, first_l - lumaDelta * i + lumaDeltaByHue * (1 - Math.cos((H - hueOfOriginalLuma) * 0.0175)) * 0.5 + alternatingLuma * math.mod(0.0175,2)));
         } 
         
         //Calculating RGB8 from HSL
@@ -683,6 +705,25 @@ $(document).ready(function(){
           var G8 = RGB8[1];
           var B8 = RGB8[2];
         }
+
+        // user color converted to XYZ color space
+        XYZ = RGBtoXYZ(R8, G8, B8);
+        var colX = XYZ[0];
+        var colY = XYZ[1];
+        var colZ = XYZ[2];
+
+        // converting XYZ space to LAB color space
+        LAB = XYZtoLAB(colX, colY, colZ);
+        var labL = LAB[0];
+        var labA = LAB[1];
+        var labB = LAB[2];
+
+        // Adding colors to the color[] for Piechart
+        daltaRGB = daltonize($('#colorBlind').val(),lmsL, lmsM, lmsS, R8, G8,B8);
+        colors[i] = "#" + rgbToHex(daltaRGB[0], daltaRGB[1] , daltaRGB[2]);
+        R8 = daltaRGB[0];
+        G8 = daltaRGB[1];
+        B8 = daltaRGB[2];
 
         //display the HEX values
         var hexColor;
@@ -736,6 +777,17 @@ $(document).ready(function(){
         childDiv(rgb_bChild,"rgb_bChild",i,rgb_b,Math.round(B8 * (100 / 255)));
         // end. display RGB values
 
+        //Convert RGB colors to HSL color scheme
+        HSL = RGBtoHSL(Math.round(R8 * (100 / 255)), Math.round(G8 * (100 / 255)), Math.round(B8 * (100 / 255)));
+        // display HSL values
+        var hslCalc_hChild;
+        childDiv(hslCalc_hChild,"hslCalc_hChild",i,hslCalc_h,HSL[0]);        
+        var hslCalc_sChild;
+        childDiv(hslCalc_sChild,"hslCalc_sChild",i,hslCalc_s,HSL[1]);
+        var hslCalc_lChild;
+        childDiv(hslCalc_lChild,"hslCalc_lChild",i,hslCalc_l,HSL[2]);
+        // end. display HSL values
+
         //function call HCY
         HCY = RGBtoHCY(H, R8, G8, B8);
         var hcyH = HCY[0];
@@ -750,18 +802,6 @@ $(document).ready(function(){
         var hcy_yChild;
         childDiv(hcy_yChild,"hcy_yChild",i,hcy_y,hcyY);
         // end. display HCY color space
-
-        // user color converted to XYZ color space
-        XYZ = RGBtoXYZ(R8, G8, B8);
-        var colX = XYZ[0];
-        var colY = XYZ[1];
-        var colZ = XYZ[2];
-
-        // converting XYZ space to LAB color space
-        LAB = XYZtoLAB(colX, colY, colZ);
-        var labL = LAB[0];
-        var labA = LAB[1];
-        var labB = LAB[2];
 
         // display LAB color space
         var lab_lChild;
@@ -841,13 +881,7 @@ $(document).ready(function(){
         childDiv(lms_sChild,"lms_sChild",i,lms_s,lmsS);
         // .end LMS color space
 
-        // Adding colors to the color[] for Piechart
-        if($('#colorBlind').val() === "Disable") {
-          colors[i] = "#" + rgbToHex(R8, G8, B8);
-        } else {
-          daltaRGB = daltonize($('#colorBlind').val(),lmsL, lmsM, lmsS, R8, B8,G8);
-          colors[i] = "#" + rgbToHex(daltaRGB[0], daltaRGB[1] , daltaRGB[2]);
-        }
+        //Increment the Lightness
         L = L + diff;
       }
     }
@@ -991,9 +1025,9 @@ $(document).ready(function(){
       H = 0;
     } else {
       if(u<0) {
-        H = (Math.atan(v/u) * grad + 180) % 360;
+        H = math.mod((Math.atan(v/u) * grad + 180),360);
       } else {
-        H = (Math.atan(v/u) * grad + 180 * u) % 360;
+        H = math.mod((Math.atan(v/u) * grad + 180 * u),360);
       }
     }
     return [Math.round(L),Math.round(C),Math.round(H)];
@@ -1008,9 +1042,9 @@ $(document).ready(function(){
       H = 0;
     } else {
       if(a<0) {
-        H = (Math.atan(b/a) * grad + 180) % 360;
+        H = math.mod((Math.atan(b/a) * grad + 180),360);
       } else {
-        H = (Math.atan(b/a) * grad + 180 * a) % 360;
+        H = math.mod((Math.atan(b/a) * grad + 180 * a),360);
       }
     }
     return [Math.round(L),Math.round(C),Math.round(H)];
@@ -1025,7 +1059,7 @@ $(document).ready(function(){
     if(rr === gg && rr === bb) {
       var H = 0;
     } else if(M === rr) {
-      var H = (((gg-bb)/(M-m)) % 6) * 60;
+      var H = math.mod(((gg-bb)/(M-m)),6) * 60;
     } else if(M === gg) {
       var H = (2 + (bb-rr)/(M-m)) * 60;
     } else {
@@ -1039,7 +1073,7 @@ $(document).ready(function(){
   function RGB8forHSL(H, S, L) {
     var C, X, m, rr, gg, bb, r8, g8, b8;
     C = (1 - Math.abs(2 * L * 0.01 - 1)) * S * 0.01;
-    X = C * (1 - Math.abs(((H / 60) % 2) - 1));
+    X = C * (1 - Math.abs(math.mod((H / 60),2) - 1));
     m = L * 0.01 - C * 0.5;
     if (H < 60) {
         rr = C + m;
@@ -1075,7 +1109,7 @@ $(document).ready(function(){
   function RGB8forHCY(H, S, L) {
     var C, X, m, r, g, b, rr, gg, bb, r8, g8, b8;
     C = S * 0.01;
-    X = C * (1 - Math.abs(((H / 60) % 2) - 1));
+    X = C * (1 - Math.abs(math.mod((H / 60),2) - 1));
     if (H < 60) {
         rr = C;
         gg = X;
@@ -1161,6 +1195,28 @@ $(document).ready(function(){
     return [Math.round(R), Math.round(G), Math.round(B)];
   }
 
+  function RGBtoHSL(r, g, b) {
+    var M = Math.max(r,g,b);
+    var m = Math.min(r,g,b);
+    var c = M - m;
+    if( r === g && r === b) {
+      H = 0;
+    } else if(M === r) {
+      H = math.mod(((g-b)/c),6) * 60;
+    } else if(M === g) {
+      H = (2 + (b - r)/c) * 60;
+    } else {
+      H = (4 + (r - g)/c) * 60;
+    }
+    L = (M + m) * 0.5;
+    if(c === 0) {
+      S = 0;
+    } else {
+      S = c / (1 - Math.abs(2 * L * 0.01-1));
+    }
+    return [Math.round(H), Math.round(S), Math.round(L)];
+  }
+
   function daltonize(colorBlind,lmsL,lmsM,lmsS,R8,G8,B8) {
     if(colorBlind === "Protanope") {
       l = (0.0 * lmsL) + (2.02344 * lmsM) + (-2.52581 * lmsS);
@@ -1242,6 +1298,8 @@ $(document).ready(function(){
       if(B_new > 255) B_new = 255;
       // Record Value
       return [R_new >> 0, G_new >> 0, B_new >> 0];
+    } else {
+      return [R8, G8, B8];
     }
   }
 });
