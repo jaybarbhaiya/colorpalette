@@ -87,103 +87,89 @@
 	      	<input type="text" id="lumaDelta" size="1" class="form-control"/>
 	      </td>
 	    </tr>
-	    <!-- <tr id="sequentialParameter" class="form-inline">
-	      <td id="sequentialParameter">
-	          <label id="sequentialParameter"><b>Start color:</b></label>
-	      </td>
-	      <td id="sequentialParameter">
-	          <input id="sequentialParameter" type="text" id="seqStartHue" size="1" class="form-control" />
-	      </td>
-	      <td id="sequentialParameter">
-	          <input id="sequentialParameter" type="text" id="seqStartChroma" size="1" class="form-control" />
-	      </td>
-	      <td id="sequentialParameter">
-	          <input id="sequentialParameter" type="text" id="seqStartLuma" size="1" class="form-control" />
-	      </td>
-	  </tr> -->
-	        <tr id="sequentialParameter">
-	            <td id="sequentialParameter">
-	                <label id="sequentialParameter"><b>End color:</b></label>
-	            </td>
-	            <td id="sequentialParameter">
-	                <input id="endH" xml:id="endH" type="text" size="1" class="form-control"/>
-	            </td>
-	            <td id="sequentialParameter">
-	                <input id="endS" xml:id="endS" type="text" size="1" class="form-control"/>
-	            </td>
-	            <td id="sequentialParameter">
-	                <input id="endL" xml:id="endL" type="text" size="1" class="form-control"/>
-	            </td>
-	        </tr>
-	        <tr>
-	            <td>
-	                <b>Delta by Hue</b>&nbsp;<input type="checkbox" name="hue" value="deltaByHue" checked/>&nbsp;Unique Hues &nbsp;&nbsp;&nbsp;&nbsp;
-	            </td>
-	            <td>
-	                <input type="text" size="1" disabled class="form-control"/>   <br/>
-	            </td>
-	            <td>
-	            	<input type="text" id="chromaDeltaByHue" size="1" class="form-control"/>
-	            </td>
-	            <td>
-	            	<input type="text" id="lumaDeltaByHue" size="1" class="form-control"/>
-	            </td>
-	        </tr>
-	        <tr>
+	      <tr id="sequentialParameter">
+	          <td id="sequentialParameter">
+	              <label id="sequentialParameter"><b>End color:</b></label>
+	          </td>
+	          <td id="sequentialParameter">
+	              <input id="endH" xml:id="endH" type="text" size="1" class="form-control"/>
+	          </td>
+	          <td id="sequentialParameter">
+	              <input id="endS" xml:id="endS" type="text" size="1" class="form-control"/>
+	          </td>
+	          <td id="sequentialParameter">
+	              <input id="endL" xml:id="endL" type="text" size="1" class="form-control"/>
+	          </td>
+	      </tr>
+	      <tr>
 	          <td>
-	              <b>Hue of Original</b>&nbsp;<input type="checkbox" id="hueOfOriginal" name="hue" value="hueOfOriginal"/>&nbsp;Adjust LCh Hue &nbsp;&nbsp;&nbsp;&nbsp;
+	              <b>Delta by Hue</b>&nbsp;<input type="checkbox" name="hue" value="deltaByHue" checked/>&nbsp;Unique Hues &nbsp;&nbsp;&nbsp;&nbsp;
 	          </td>
 	          <td>
-	              <input type="text" size="1" disabled class="form-control"/>
+	              <input type="text" size="1" disabled class="form-control"/>   <br/>
 	          </td>
 	          <td>
-	          	<input type="text" id="hueOfOriginalChroma" size="1" value ="200" class="form-control"/>
+	          	<input type="text" id="chromaDeltaByHue" size="1" class="form-control"/>
 	          </td>
 	          <td>
-	          	<input type="text" id="hueOfOriginalLuma" size="1" value="240" class="form-control"/>
+	          	<input type="text" id="lumaDeltaByHue" size="1" class="form-control"/>
 	          </td>
-	        </tr>
-	        <tr>
-	          <td>
-	              <b>Alternating Delta</b>&nbsp;<input type="checkbox" id="alteringDelta" name="hue" value="alternatingDelta" />&nbsp;Use RYB hues &nbsp;&nbsp;&nbsp;&nbsp;
-	          </td>
-	          <td>
-	              <input type="text" size="1" disabled class="form-control"/>
-	          </td>
-	          <td>
-	          	<input type="text" id="alternatingChroma" size="1" class="form-control"/>
-	          </td>
-	          <td>
-	            <input type="text" id="alternatingLuma" size="1" class="form-control"/>
-	          </td>
-	        </tr>
-	        <tr>
-	          <td>
-	              <b>Pie: Number / Shrink(%)</b>
-	          </td>
-	          <td>
-	            <input type="text" id="pieSlice" value="36" size="1" class="form-control"/>
-	          </td>
-	          <td>
-	             <input type="text" id="sliceShrink" size="1" class="form-control"/>
-	          </td>
-	        </tr>
-	        <tr>
-			  		<td>
-			  			<b>Color blindness:</b> &nbsp;
-			  			<select id="colorBlind" class="form-control">
-			          <option value="Disable">Disable</option>
-			          <option value="Protanope">Protanope (Red)</option>
-			          <option value="Deuteranope">Deuteranope(Green)</option>
-			          <option value="Tritanope">Tritanope (Blue)</option>
-			      	</select>
-			  		</td>
-			  		<tr><td>&nbsp;</td></tr>
-	        <tr>
-	          <td>
-	            <input type="submit" id="generatePalette" value="Generate Palette" class="btn btn-primary" />
-	          </td>
-	        </tr>
+	      </tr>
+	      <tr>
+	        <td>
+	            <b>Hue of Original</b>&nbsp;<input type="checkbox" id="hueOfOriginal" name="hue" value="hueOfOriginal"/>&nbsp;Adjust LCh Hue &nbsp;&nbsp;&nbsp;&nbsp;
+	        </td>
+	        <td>
+	            <input type="text" size="1" disabled class="form-control"/>
+	        </td>
+	        <td>
+	        	<input type="text" id="hueOfOriginalChroma" size="1" value ="200" class="form-control"/>
+	        </td>
+	        <td>
+	        	<input type="text" id="hueOfOriginalLuma" size="1" value="240" class="form-control"/>
+	        </td>
+	      </tr>
+	      <tr>
+	        <td>
+	            <b>Alternating Delta</b>&nbsp;<input type="checkbox" id="alteringDelta" name="hue" value="alternatingDelta" />&nbsp;Use RYB hues &nbsp;&nbsp;&nbsp;&nbsp;
+	        </td>
+	        <td>
+	            <input type="text" size="1" disabled class="form-control"/>
+	        </td>
+	        <td>
+	        	<input type="text" id="alternatingChroma" size="1" class="form-control"/>
+	        </td>
+	        <td>
+	          <input type="text" id="alternatingLuma" size="1" class="form-control"/>
+	        </td>
+	      </tr>
+	      <tr>
+	        <td>
+	            <b>Pie: Number / Shrink(%)</b>
+	        </td>
+	        <td>
+	          <input type="text" id="pieSlice" value="36" size="1" class="form-control"/>
+	        </td>
+	        <td>
+	           <input type="text" id="sliceShrink" size="1" class="form-control"/>
+	        </td>
+	      </tr>
+	      <tr>
+		  		<td>
+		  			<b>Color blindness:</b> &nbsp;
+		  			<select id="colorBlind" class="form-control">
+		          <option value="Disable">Disable</option>
+		          <option value="Protanope">Protanope (Red)</option>
+		          <option value="Deuteranope">Deuteranope(Green)</option>
+		          <option value="Tritanope">Tritanope (Blue)</option>
+		      	</select>
+		  		</td>
+		  		<tr><td>&nbsp;</td></tr>
+	      <tr>
+	        <td>
+	          <input type="submit" id="generatePalette" value="Generate Palette" class="btn btn-primary" />
+	        </td>
+	      </tr>
 	    </table>
       <div id="pieChart"></div>
 		</div>
