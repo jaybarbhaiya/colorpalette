@@ -4,6 +4,8 @@ var grad = 57.296;
 $(document).ready(function(){
   $('#sequentialParameter').hide();
 
+  $('#sliceShrink').hide();
+
   $('#first').hide();
 
   disableFirst();
